@@ -1,0 +1,16 @@
+﻿Build started 10/7/2015 9:55:22 PM.
+     1>Project "C:\Users\Ravish\Documents\Visual Studio 2015\Projects\VirtualReality\CameraTest\CameraTest.vcxproj" on node 2 (Build target(s)).
+     1>ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\x86_amd64\CL.exe /c /ZI /nologo /W3 /WX- /sdl /Od /D _DEBUG /D _CONSOLE /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Yu"stdafx.h" /Fp"x64\Debug\CameraTest.pch" /Fo"x64\Debug\\" /Fd"x64\Debug\vc140.pdb" /Gd /TP /errorReport:prompt DeviceSettings.cpp
+         DeviceSettings.cpp
+       Link:
+         C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\x86_amd64\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\Ravish\Documents\Visual Studio 2015\Projects\VirtualReality\x64\Debug\CameraTest.exe" /INCREMENTAL /NOLOGO libpxcmd_d.lib libpxcutilsmd_d.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /Debug /PDB:"C:\Users\Ravish\Documents\Visual Studio 2015\Projects\VirtualReality\x64\Debug\CameraTest.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\Ravish\Documents\Visual Studio 2015\Projects\VirtualReality\x64\Debug\CameraTest.lib" /MACHINE:X64 x64\Debug\CameraTest.obj
+         x64\Debug\DeviceSettings.obj
+         x64\Debug\stdafx.obj
+     1>CameraTest.obj : error LNK2019: unresolved external symbol "public: static void __cdecl DeviceSettings::SetDeviceDepthSetting(class PXCCapture::Device *,enum Modality)" (?SetDeviceDepthSetting@DeviceSettings@@SAXPEAVDevice@PXCCapture@@W4Modality@@@Z) referenced in function wmain
+     1>C:\Users\Ravish\Documents\Visual Studio 2015\Projects\VirtualReality\x64\Debug\CameraTest.exe : fatal error LNK1120: 1 unresolved externals
+     1>Done Building Project "C:\Users\Ravish\Documents\Visual Studio 2015\Projects\VirtualReality\CameraTest\CameraTest.vcxproj" (Build target(s)) -- FAILED.
+
+Build FAILED.
+
+Time Elapsed 00:00:01.40

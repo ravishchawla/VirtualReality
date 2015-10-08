@@ -8,7 +8,7 @@
 #include "util_cmdline.h"
 #include "util_render.h"
 #include <conio.h>
-
+#include "DeviceSettings.h"
 
 #define NFRAMES 200
 
@@ -19,6 +19,8 @@ int wmain(int argc, WCHAR* argv[]) {
 	cout << "Hello, World!\n";
 
 	PXCSenseManager *session = PXCSenseManager::CreateInstance();
+	
+
 
 	if (!session) {
 		cout << "Unable to create instance of PXCSenseManager\n";
@@ -55,6 +57,7 @@ int wmain(int argc, WCHAR* argv[]) {
 
 	//get device and reset it
 	PXCCapture::Device *device = session->QueryCaptureManager()->QueryDevice();
+	DeviceSettings::SetDeviceDepthSetting(device, Modality::FACTORY_DEFAULT);
 	device->ResetProperties(PXCCapture::STREAM_TYPE_ANY);
 
 	//stream data
