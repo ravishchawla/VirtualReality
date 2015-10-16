@@ -53,7 +53,9 @@ vector<Point> points;
 PXCScenePerception::VoxelResolution voxelResolution = PXCScenePerception::VoxelResolution::LOW_RESOLUTION;
 
 Feed feedType;
-ofstream file;
+ofstream currentFile;
+string depthFile;
+string colorFile;
 
 int mainWnd = 0;
 int windowRect[2] = { 2 * IMG_WIDTH, 2 * IMG_HEIGHT};
@@ -73,7 +75,7 @@ float imageQuality = 0.0f;
 PXCCapture::Sample sample;
 
 static GLuint sdl = -1;
-void writeHeaderToFile();
+
 
 void clbReshape(int width, int height)
 {
@@ -96,9 +98,9 @@ void exitFunc(int returnCode)
 	depthFromVerticesImage.reset(nullptr);
 
 	wcout << L"RF_AugmentedRealitySP: Ends" << endl;
-	if (file.is_open())
-		file.flush();
-		file.close();
+	if (currentFile.is_open())
+		currentFile.flush();
+		currentFile.close();
 
 	exit(returnCode);
 }
@@ -114,21 +116,8 @@ void Reset()
 	trackingStatus = PXCScenePerception::TrackingAccuracy::FAILED;
 	pScenePerceptionController->PauseScenePerception(true);
 	points.clear();
-	writeHeaderToFile();
 }
 
-void writeHeaderToFile() {
-	if (!file.is_open()) {
-		return;
-	}
-	
-	if (feedType == COLOR) {
-		file << "COLOR" << endl;
-	}
-	else if (feedType == DEPTH) {
-		file << "DEPTH" << endl;
-	}
-}
 
 void clbKeys(unsigned char key, int x, int y)
 {
@@ -145,11 +134,17 @@ void clbKeys(unsigned char key, int x, int y)
 	case 'd': //switch to depth mode
 		cout << "Change mode to Depth\n";
 		feedType = DEPTH;
+		currentFile.flush();
+		currentFile.close();
+		currentFile.open(depthFile, fstream::out);
 		Reset();
 		break;
 	case 'c': //switch to color mode
 		cout << "Change mode to Color\n";
 		feedType = COLOR;
+		currentFile.flush();
+		currentFile.close();
+		currentFile.open(colorFile, fstream::out);
 		Reset();
 		break;
 	}
@@ -217,8 +212,8 @@ void clbMouse(int clickedbutton, int clickState, int x, int y)
 		cout << "X: " << x << " Y: " << y << "\n";	
 		Point p = { (float)x, (float)y};
 		points.push_back(p);
-		if (file.is_open()) {
-			file << x << "," << y << endl;
+		if (currentFile.is_open()) {
+			currentFile << x << " " << y << endl;
 		}
 	}
 }
@@ -273,16 +268,20 @@ int main(int argc, WCHAR* argvW[])
 	time_t t = time(0);
 	struct tm *now = localtime(&t);
 	char filename[80];
-	strftime(filename, 80, "%Y-%m-%d-%H-%M-%S.txt", now);
-	file.open(filename, fstream::out);
-	if (!file.is_open()) {
+	strftime(filename, 80, "%Y-%m-%d-%H-%M-%S", now);
+	string name = std::string(filename);
+
+	colorFile = name + "-colors.txt";
+	depthFile = name + "-depth.txt";
+
+	currentFile.open(colorFile, fstream::out);
+	
+	if (!currentFile.is_open()) {
 		cout << "Log file not created";
 	}
 	else {
 		cout << "log file created? " << filename;
 	}
-
-	writeHeaderToFile();
 
 	pScenePerceptionController.reset(new ScenePerceptionController(L"Augmented Reality SP", argc, argvW, L"",
 		COLOR_CAPTURE_WIDTH, COLOR_CAPTURE_HEIGHT, COLOR_FRAMERATE,
