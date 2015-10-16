@@ -1,9 +1,37 @@
-﻿Build started 10/6/2015 10:35:12 PM.
+﻿Build started 10/13/2015 6:53:05 PM.
      1>Project "C:\Users\Ravish\Documents\Visual Studio 2015\Projects\VirtualReality\CameraTest\CameraTest.vcxproj" on node 2 (Build target(s)).
-     1>Link:
-         CameraTest.vcxproj -> C:\Users\Ravish\Documents\Visual Studio 2015\Projects\VirtualReality\Debug\CameraTest.exe
-     1>Done Building Project "C:\Users\Ravish\Documents\Visual Studio 2015\Projects\VirtualReality\CameraTest\CameraTest.vcxproj" (Build target(s)).
+     1>ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\CL.exe /c /I. /Iinclude /Ires /I../common/include /I../../include /I"C:\Program Files (x86)\Intel\RSSDK\/include" /I"C:\Program Files (x86)\Intel\RSSDK\/sample/common/include" /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Yu"stdafx.h" /Fp"Debug\CameraTest.pch" /Fo"Debug\\" /Fd"Debug\vc140.pdb" /Gd /TP /analyze- /errorReport:prompt CameraTest.cpp DeviceSettings.cpp
+         DeviceSettings.cpp
+         CameraTest.cpp
+     1>c:\users\ravish\documents\visual studio 2015\projects\virtualreality\cameratest\cameratest.cpp(4): warning C4627: '#include <memory>': skipped when looking for precompiled header use
+         c:\users\ravish\documents\visual studio 2015\projects\virtualreality\cameratest\cameratest.cpp(4): note: Add directive to 'stdafx.h' or rebuild precompiled header
+     1>c:\users\ravish\documents\visual studio 2015\projects\virtualreality\cameratest\cameratest.cpp(5): warning C4627: '#include "pxcsensemanager.h"': skipped when looking for precompiled header use
+         c:\users\ravish\documents\visual studio 2015\projects\virtualreality\cameratest\cameratest.cpp(5): note: Add directive to 'stdafx.h' or rebuild precompiled header
+     1>c:\users\ravish\documents\visual studio 2015\projects\virtualreality\cameratest\cameratest.cpp(6): warning C4627: '#include <iostream>': skipped when looking for precompiled header use
+         c:\users\ravish\documents\visual studio 2015\projects\virtualreality\cameratest\cameratest.cpp(6): note: Add directive to 'stdafx.h' or rebuild precompiled header
+     1>c:\users\ravish\documents\visual studio 2015\projects\virtualreality\cameratest\cameratest.cpp(7): warning C4627: '#include <Windows.h>': skipped when looking for precompiled header use
+         c:\users\ravish\documents\visual studio 2015\projects\virtualreality\cameratest\cameratest.cpp(7): note: Add directive to 'stdafx.h' or rebuild precompiled header
+     1>c:\users\ravish\documents\visual studio 2015\projects\virtualreality\cameratest\cameratest.cpp(8): warning C4627: '#include "util_cmdline.h"': skipped when looking for precompiled header use
+         c:\users\ravish\documents\visual studio 2015\projects\virtualreality\cameratest\cameratest.cpp(8): note: Add directive to 'stdafx.h' or rebuild precompiled header
+     1>c:\users\ravish\documents\visual studio 2015\projects\virtualreality\cameratest\cameratest.cpp(9): warning C4627: '#include "util_render.h"': skipped when looking for precompiled header use
+         c:\users\ravish\documents\visual studio 2015\projects\virtualreality\cameratest\cameratest.cpp(9): note: Add directive to 'stdafx.h' or rebuild precompiled header
+     1>c:\users\ravish\documents\visual studio 2015\projects\virtualreality\cameratest\cameratest.cpp(10): warning C4627: '#include <conio.h>': skipped when looking for precompiled header use
+         c:\users\ravish\documents\visual studio 2015\projects\virtualreality\cameratest\cameratest.cpp(10): note: Add directive to 'stdafx.h' or rebuild precompiled header
+     1>c:\users\ravish\documents\visual studio 2015\projects\virtualreality\cameratest\cameratest.cpp(11): warning C4627: '#include "DeviceSettings.h"': skipped when looking for precompiled header use
+         c:\users\ravish\documents\visual studio 2015\projects\virtualreality\cameratest\cameratest.cpp(11): note: Add directive to 'stdafx.h' or rebuild precompiled header
+     1>c:\users\ravish\documents\visual studio 2015\projects\virtualreality\cameratest\cameratest.cpp(12): warning C4627: '#include <glew\include\GL\glew.h>': skipped when looking for precompiled header use
+         c:\users\ravish\documents\visual studio 2015\projects\virtualreality\cameratest\cameratest.cpp(12): note: Add directive to 'stdafx.h' or rebuild precompiled header
+     1>c:\users\ravish\documents\visual studio 2015\projects\virtualreality\cameratest\cameratest.cpp(13): warning C4627: '#include <gl\GL.h>': skipped when looking for precompiled header use
+         c:\users\ravish\documents\visual studio 2015\projects\virtualreality\cameratest\cameratest.cpp(13): note: Add directive to 'stdafx.h' or rebuild precompiled header
+     1>c:\users\ravish\documents\visual studio 2015\projects\virtualreality\cameratest\cameratest.cpp(14): warning C4627: '#include <freeglut\include\GL\glut.h>': skipped when looking for precompiled header use
+         c:\users\ravish\documents\visual studio 2015\projects\virtualreality\cameratest\cameratest.cpp(14): note: Add directive to 'stdafx.h' or rebuild precompiled header
+     1>c:\users\ravish\documents\visual studio 2015\projects\virtualreality\cameratest\cameratest.cpp(15): warning C4627: '#include <freeglut\include\GL\freeglut_ext.h>': skipped when looking for precompiled header use
+         c:\users\ravish\documents\visual studio 2015\projects\virtualreality\cameratest\cameratest.cpp(15): note: Add directive to 'stdafx.h' or rebuild precompiled header
+     1>c:\users\ravish\documents\visual studio 2015\projects\virtualreality\cameratest\cameratest.cpp(141): fatal error C1010: unexpected end of file while looking for precompiled header. Did you forget to add '#include "stdafx.h"' to your source?
+         Generating Code...
+     1>Done Building Project "C:\Users\Ravish\Documents\Visual Studio 2015\Projects\VirtualReality\CameraTest\CameraTest.vcxproj" (Build target(s)) -- FAILED.
 
-Build succeeded.
+Build FAILED.
 
-Time Elapsed 00:00:00.32
+Time Elapsed 00:00:01.33

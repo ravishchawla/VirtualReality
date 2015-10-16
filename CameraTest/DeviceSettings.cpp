@@ -8,8 +8,11 @@
 #include "DeviceSettings.h"
 using namespace std;
 
+//void DeviceSettings::StereoCalibrate(vector<Point> imagePoints, vector<Point> image2Point, vector<Point> objectPoints) {
+	
+//}
 
-static void SetDeviceDepthSetting(PXCCapture::Device *device, Modality mode) {
+void DeviceSettings::SetDeviceDepthSetting(PXCCapture::Device *device, Modality mode) {
 
 	switch (mode) {
 	case Modality::FACE_TRACKING:
@@ -34,7 +37,7 @@ static void SetDeviceDepthSetting(PXCCapture::Device *device, Modality mode) {
 	}
 }
 
-static void SetDepthSettingValues(PXCCapture::Device *device, short confidenceThreshold, short filterOption, short laserPower, short motionRangeTradeoff, PXCCapture::Device::IVCAMAccuracy accuracy) {
+void DeviceSettings::SetDepthSettingValues(PXCCapture::Device *device, short confidenceThreshold, short filterOption, short laserPower, short motionRangeTradeoff, PXCCapture::Device::IVCAMAccuracy accuracy) {
 	device->SetDepthConfidenceThreshold(confidenceThreshold);
 	device->SetIVCAMFilterOption(filterOption);
 	device->SetIVCAMLaserPower(laserPower);

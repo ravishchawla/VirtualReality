@@ -15,25 +15,25 @@
 using namespace std;
 
 
-int wmain(int argc, WCHAR* argv[]) {
+int wmin(int argc, WCHAR* argv[]) {
 	cout << "Hello, World!\n";
 
 	PXCSenseManager *session = PXCSenseManager::CreateInstance();
-	
+
 
 
 	if (!session) {
 		cout << "Unable to create instance of PXCSenseManager\n";
 		return 3;
 	}
-	
+
 
 	//get capture manager instance if file record is set to true (m_brecord)
 	PXCCaptureManager *captureManager = session->QueryCaptureManager();
-	
+
 	UtilRender renderc(L"Color");
 	UtilRender renderd(L"Depth");
-	
+
 	pxcStatus status;
 
 	PXCVideoModule::DataDesc streams = {};
@@ -85,7 +85,7 @@ int wmain(int argc, WCHAR* argv[]) {
 		session->ReleaseFrame();
 
 		//check for keystroke press
-		if ( _kbhit() ) {
+		if (_kbhit()) {
 			int key = _getch() & 255;
 			if (key == 27 || key == 'q' || key == 'Q') {
 				break;
@@ -102,5 +102,6 @@ int wmain(int argc, WCHAR* argv[]) {
 
 
 	system("pause");
-    return 0;
+	return 0;
 }
+

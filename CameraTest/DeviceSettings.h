@@ -9,6 +9,11 @@ enum Modality {
 	TOUCHLESS_CONTROLLER
 };
 
+typedef struct Point {
+	int x;
+	int y;
+} Point;
+
 class DeviceSettings {
 public:
 	static void SetDeviceDepthSetting(PXCCapture::Device *device, Modality mode);
@@ -18,4 +23,5 @@ public:
 		short laserPower,
 		short motionRangeTradeoff,
 		PXCCapture::Device::IVCAMAccuracy accuracy);
+
 };
