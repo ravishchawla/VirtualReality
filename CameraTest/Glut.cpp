@@ -15,6 +15,7 @@ Copyright(c) 2011-2015 Intel Corporation. All Rights Reserved.
 #include <algorithm>
 #include <conio.h>
 #include <fstream>
+#include <sstream>
 #include<ctime>
 
 #include "sp_controller.h"
@@ -38,8 +39,10 @@ using namespace AppUtils;
 
 enum Feed
 {
-	COLOR,
-	DEPTH
+	COLOR1,
+	DEPTH1,
+	COLOR2,
+	DEPTH2
 };
 
 const int IMG_WIDTH = 320;
@@ -53,9 +56,11 @@ vector<Point> points;
 PXCScenePerception::VoxelResolution voxelResolution = PXCScenePerception::VoxelResolution::LOW_RESOLUTION;
 
 Feed feedType;
-ofstream currentFile;
-string depthFile;
-string colorFile;
+fstream currentFile;
+string depthFile1;
+string colorFile1;
+string depthFile2;
+string colorFile2;
 
 int mainWnd = 0;
 int windowRect[2] = { 2 * IMG_WIDTH, 2 * IMG_HEIGHT};
@@ -70,6 +75,12 @@ std::unique_ptr<unsigned char[]> camBgraImage(nullptr); // the captured BGRA ima
 std::unique_ptr<unsigned short[]> camDepImage(nullptr); // the captured depth image
 std::unique_ptr<float[]> verticesImage(nullptr); // Vertices image 
 std::unique_ptr<float[]> depthFromVerticesImage(nullptr); // vertices image converted to depth image 
+
+std::vector<std::vector<cv::Point2f>> camera1Points;
+std::vector<std::vector<cv::Point2f>> camera2Points;
+std::vector<std::vector<cv::Point3f>> objectPoints;
+
+std::vector<cv::Point2f> *currentList;
 
 float imageQuality = 0.0f;
 PXCCapture::Sample sample;
@@ -116,6 +127,13 @@ void Reset()
 	trackingStatus = PXCScenePerception::TrackingAccuracy::FAILED;
 	pScenePerceptionController->PauseScenePerception(true);
 	points.clear();
+	camera1Points.clear();
+	camera2Points.clear();
+	camera1Points.push_back(std::vector<cv::Point2f>());
+	camera1Points.push_back(std::vector<cv::Point2f>());
+	camera2Points.push_back(std::vector<cv::Point2f>());
+	camera2Points.push_back(std::vector<cv::Point2f>());
+
 }
 
 string getTimeName(Feed feed)
@@ -126,10 +144,14 @@ string getTimeName(Feed feed)
 	strftime(filename, 80, "%Y-%m-%d-%H-%M-%S", now);
 	string name = std::string(filename);
 
-	if (feed == COLOR)
-		name += "-color";
-	else if (feed == DEPTH)
-		name += "-depth";
+	if (feed == COLOR1)
+		name += "-color1";
+	else if (feed == DEPTH1)
+		name += "-depth1";
+	else if (feed == COLOR2)
+		name += "-color2";
+	else if (feed == DEPTH2)
+		name += "-depth2";
 
 	return name;
 }
@@ -183,6 +205,68 @@ void snapshot()
 
 }
 
+void read3dPoints(string filename, std::vector<cv::Point3f> *list) {
+	ifstream dfile(filename);
+	string line;
+	int n;
+	std::stringstream stream;
+	if (dfile.is_open()) {
+		while (getline(dfile, line)) {
+			cv::Point3f point;
+			stream = std::stringstream(line);
+			stream >> n;
+			point.x = n;
+
+			stream >> n;
+			point.y = n;
+
+			stream >> n;
+			point.z = n;
+			list->push_back(point);
+		}
+	dfile.close();
+	}
+}
+
+void read3dPoints() {
+	objectPoints.push_back(std::vector<cv::Point3f>());
+	objectPoints.push_back(std::vector<cv::Point3f>());
+
+	read3dPoints("3dpoints1.txt", &objectPoints[0]);
+	read3dPoints("3dpoints2.txt", &objectPoints[1]);
+}
+
+void switchMode(Feed type, boolean writeToFile) {
+	cout << "Change mode to " << type;
+	feedType = type;
+	Reset();
+
+	if (!writeToFile) {
+		return;
+	}
+	
+	if (currentFile.is_open()) {
+		currentFile.flush();
+		currentFile.close();
+	}
+	
+	if (type == COLOR1) {
+		currentFile.open(colorFile1, fstream::out);
+		currentList = &camera1Points[0];
+	}
+	else if (type == DEPTH1) {
+		currentFile.open(depthFile1, fstream::out);
+		currentList = &camera1Points[1];
+	}
+	else if (type == COLOR2) {
+		currentFile.open(colorFile2, fstream::out);
+		currentList = &camera2Points[0];
+	}
+	else if (type == DEPTH2) {
+		currentFile.open(depthFile2, fstream::out);
+		currentList = &camera2Points[1];
+	}
+}
 
 void clbKeys(unsigned char key, int x, int y)
 {
@@ -197,24 +281,46 @@ void clbKeys(unsigned char key, int x, int y)
 		Reset();
 		break;
 	case 'd': //switch to depth mode
-		cout << "Change mode to Depth\n";
-		feedType = DEPTH;
-		currentFile.flush();
-		currentFile.close();
-		currentFile.open(depthFile, fstream::out);
-		Reset();
+		switchMode(DEPTH1, false);
 		break;
 	case 'c': //switch to color mode
-		cout << "Change mode to Color\n";
-		feedType = COLOR;
-		currentFile.flush();
-		currentFile.close();
-		currentFile.open(colorFile, fstream::out);
-		Reset();
+		switchMode(COLOR1, false);
 		break;
-	case 's': //take snapshot
+	case 'k': //take snapshot
 		cout << "Taking screenshot\n";
 		snapshot();
+		break;
+	case 's': //start calibration
+		switchMode(COLOR1, true);
+		cout << "Start calibration process" << endl;
+		cout << "3d points should be in a local file 3dpoints1.txt and 3depoints2.txt" << endl;
+		cout << "Press n to go to next image/feed" << endl;
+		break;
+	case 'n': //move to next step
+		snapshot();
+		if (feedType == COLOR1) {
+			cout << "select the same points without moving the camera in Depth View" << endl;
+			switchMode(DEPTH1, true);
+		}
+		else if (feedType == DEPTH1) {
+			cout << "select the same points from a different perspective" << endl;
+			switchMode(COLOR2, true);
+		}
+		else if (feedType == COLOR2) {
+			cout << "select the same points without moving the camera in Depth View" << endl;
+			switchMode(DEPTH2, true);
+		}
+		else if (feedType == DEPTH2) {
+			cout << "Ensure 3d points are in local file 3dpoints(1,2).txt before pressing enter" << endl;
+			system("pause");
+			read3dPoints();
+			cv::Size size(320, 240);
+			DeviceSettings::StereoCalibrate(camera1Points, camera2Points, objectPoints, size);
+		}
+		else {
+			cout << "Invalid state" << endl;
+			break;
+		}
 		break;
 	}
 }
@@ -237,7 +343,7 @@ void clbDisplay(void)
 		}
 		
 		PXCImage *imageType;
-		if (feedType == DEPTH) {
+		if (feedType == DEPTH1 || feedType == DEPTH2) {
 			imageType = sample.depth;
 		}
 		else {
@@ -283,6 +389,10 @@ void clbMouse(int clickedbutton, int clickState, int x, int y)
 		points.push_back(p);
 		if (currentFile.is_open()) {
 			currentFile << x << " " << y << endl;
+		}
+
+		if (currentList) {
+			currentList->push_back(cv::Point2f(x, y));
 		}
 	}
 }
@@ -336,10 +446,10 @@ int main(int argc, WCHAR* argvW[])
 	wcout << "RF_AugmentedRealitySP: Starts." << endl;
 	
 	
-	colorFile = getTimeName(COLOR) + ".txt";
-	depthFile = getTimeName(DEPTH) + ".txt";
-
-	currentFile.open(colorFile, fstream::out);
+	colorFile1 = getTimeName(COLOR1) + ".txt";
+	depthFile1 = getTimeName(DEPTH1) + ".txt";
+	colorFile2 = getTimeName(COLOR2) + ".txt";
+	depthFile2 = getTimeName(DEPTH2) + ".txt";
 	
 	pScenePerceptionController.reset(new ScenePerceptionController(L"Augmented Reality SP", argc, argvW, L"",
 		COLOR_CAPTURE_WIDTH, COLOR_CAPTURE_HEIGHT, COLOR_FRAMERATE,

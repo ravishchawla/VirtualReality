@@ -151,7 +151,7 @@
       <Optimization>Custom</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>false</IntrinsicFunctions>
-      <PreprocessorDefinitions>WIN64;_DEBUG;_CONSOLE;_WIN64_WINNT=0x0602;GLEW_STATIC;FREEGLUT_STATIC;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN64;_CONSOLE;_WIN64_WINNT=0x0602;GLEW_STATIC;FREEGLUT_STATIC;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>.;include;res;../common/include;../../include;$(RSSDK_DIR)/include;$(RSSDK_DIR)/sample/common/include;Resource;../common/freeglut/include;../common/freeglut/include/GL;../common/glew/include;../common/glew/include/GL;$(RSSDK_DIR)/sample/common/freeglut/include;$(RSSDK_DIR)/sample/common/freeglut/include/GL;$(RSSDK_DIR)/sample/common/glew/include;$(RSSDK_DIR)/sample/common/glew/include/GL;$(OPENCV_DIR)/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>OldStyle</DebugInformationFormat>

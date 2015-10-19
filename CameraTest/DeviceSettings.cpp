@@ -28,11 +28,24 @@ void DeviceSettings::StereoCalibrate(vector<vector<Point2f>> imagePoints, vector
 
 	TermCriteria term_crit = TermCriteria(TermCriteria::COUNT + TermCriteria::EPS, 30, 1e-6);
 	int flags = CALIB_FIX_INTRINSIC;
+	double rms;
+	try {
+		rms = stereoCalibrate(objectPoints, imagePoints, imagePoints2, cameraMatrix[0], distortionCoefficients[0],
+			cameraMatrix[1], distortionCoefficients[1], size, rotationMatrix,
+			translationVector, essentialMatrix, fundamentalMatrix,
+			flags, term_crit);
+	}
+	catch (exception e) {
+		OutputDebugStringA("EXCEPTION THROWN. CAUGHT: ");
+		OutputDebugStringA(e.what());
+	}
 
-	double rms = stereoCalibrate(objectPoints, imagePoints, imagePoints2, cameraMatrix[0], distortionCoefficients[0],
-		cameraMatrix[1], distortionCoefficients[1], size, rotationMatrix,
-		translationVector, essentialMatrix, fundamentalMatrix,
-		flags, term_crit);
+	cout << "calibration complete: " << rms << endl;
+	cout << "distortion matrix: " << distortionCoefficients << endl;
+	cout << "rotation matrix: " << rotationMatrix << endl;
+	cout << "translation matrix: " << translationVector << endl;
+	cout << "essential matrix: " << essentialMatrix << endl;
+	cout << "fundamental matrix: " << fundamentalMatrix << endl;
 }
 
 void DeviceSettings::SetDeviceDepthSetting(PXCCapture::Device *device, Modality mode) {

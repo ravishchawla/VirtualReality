@@ -27,5 +27,5 @@ public:
 		short laserPower,
 		short motionRangeTradeoff,
 		PXCCapture::Device::IVCAMAccuracy accuracy);
-	void DeviceSettings::StereoCalibrate(std::vector<std::vector<cv::Point2f>> imagePoints, std::vector<std::vector<cv::Point2f>> imagePoints2, std::vector<std::vector<cv::Point3f>> objectPoints, cv::Size size);
+	static void DeviceSettings::StereoCalibrate(std::vector<std::vector<cv::Point2f>> imagePoints, std::vector<std::vector<cv::Point2f>> imagePoints2, std::vector<std::vector<cv::Point3f>> objectPoints, cv::Size size);
 };
