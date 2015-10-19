@@ -1,6 +1,7 @@
 #pragma once
 #include <vector>
 #include <opencv2\core\types.hpp>
+#include <fstream>
 
 enum Modality {
 	FACTORY_DEFAULT,
@@ -27,5 +28,5 @@ public:
 		short laserPower,
 		short motionRangeTradeoff,
 		PXCCapture::Device::IVCAMAccuracy accuracy);
-	static void DeviceSettings::StereoCalibrate(std::vector<std::vector<cv::Point2f>> imagePoints, std::vector<std::vector<cv::Point2f>> imagePoints2, std::vector<std::vector<cv::Point3f>> objectPoints, cv::Size size);
+	static void DeviceSettings::StereoCalibrate(std::vector<std::vector<cv::Point2f>> imagePoints, std::vector<std::vector<cv::Point2f>> imagePoints2, std::vector<std::vector<cv::Point3f>> objectPoints, cv::Size size, std::fstream *outfile);
 };

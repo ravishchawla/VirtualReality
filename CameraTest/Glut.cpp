@@ -14,7 +14,6 @@ Copyright(c) 2011-2015 Intel Corporation. All Rights Reserved.
 #include "math.h"
 #include <algorithm>
 #include <conio.h>
-#include <fstream>
 #include <sstream>
 #include<ctime>
 
@@ -42,7 +41,8 @@ enum Feed
 	COLOR1,
 	DEPTH1,
 	COLOR2,
-	DEPTH2
+	DEPTH2,
+	NIL
 };
 
 const int IMG_WIDTH = 320;
@@ -57,10 +57,12 @@ PXCScenePerception::VoxelResolution voxelResolution = PXCScenePerception::VoxelR
 
 Feed feedType;
 fstream currentFile;
+fstream calibFile;
 string depthFile1;
 string colorFile1;
 string depthFile2;
 string colorFile2;
+string calibFileStr;
 
 int mainWnd = 0;
 int windowRect[2] = { 2 * IMG_WIDTH, 2 * IMG_HEIGHT};
@@ -152,6 +154,9 @@ string getTimeName(Feed feed)
 		name += "-color2";
 	else if (feed == DEPTH2)
 		name += "-depth2";
+	else if (feed == NIL) {
+		name += "-calib";
+	}
 
 	return name;
 }
@@ -315,7 +320,9 @@ void clbKeys(unsigned char key, int x, int y)
 			system("pause");
 			read3dPoints();
 			cv::Size size(320, 240);
-			DeviceSettings::StereoCalibrate(camera1Points, camera2Points, objectPoints, size);
+			calibFile.open(calibFileStr, fstream::out);
+			DeviceSettings::StereoCalibrate(camera1Points, camera2Points, objectPoints, size, &calibFile);
+			calibFile.close();
 		}
 		else {
 			cout << "Invalid state" << endl;
@@ -450,7 +457,8 @@ int main(int argc, WCHAR* argvW[])
 	depthFile1 = getTimeName(DEPTH1) + ".txt";
 	colorFile2 = getTimeName(COLOR2) + ".txt";
 	depthFile2 = getTimeName(DEPTH2) + ".txt";
-	
+	calibFileStr = getTimeName(NIL) + ".txt";
+
 	pScenePerceptionController.reset(new ScenePerceptionController(L"Augmented Reality SP", argc, argvW, L"",
 		COLOR_CAPTURE_WIDTH, COLOR_CAPTURE_HEIGHT, COLOR_FRAMERATE,
 		IMG_WIDTH, IMG_HEIGHT, DEPTH_FRAMERATE));

@@ -12,7 +12,7 @@ using namespace std;
 using namespace cv;
 
 
-void DeviceSettings::StereoCalibrate(vector<vector<Point2f>> imagePoints, vector<vector<Point2f>> imagePoints2, vector<vector<Point3f>> objectPoints, Size size) {
+void DeviceSettings::StereoCalibrate(vector<vector<Point2f>> imagePoints, vector<vector<Point2f>> imagePoints2, vector<vector<Point3f>> objectPoints, Size size, fstream *outfile) {
 	
 	Mat cameraMatrix[2];
 	
@@ -41,11 +41,17 @@ void DeviceSettings::StereoCalibrate(vector<vector<Point2f>> imagePoints, vector
 	}
 
 	cout << "calibration complete: " << rms << endl;
+	*outfile << "rms: " << rms << endl;
 	cout << "distortion matrix: " << distortionCoefficients << endl;
+	*outfile << "distortion matrix: " << distortionCoefficients << endl;
 	cout << "rotation matrix: " << rotationMatrix << endl;
+	*outfile << "rotation matrix: " << rotationMatrix << endl;
 	cout << "translation matrix: " << translationVector << endl;
+	*outfile << "translation matrix: " << translationVector << endl;
 	cout << "essential matrix: " << essentialMatrix << endl;
+	*outfile << "essential matrix: " << essentialMatrix << endl;
 	cout << "fundamental matrix: " << fundamentalMatrix << endl;
+	*outfile << "fundamental matrix: " << fundamentalMatrix << endl;
 }
 
 void DeviceSettings::SetDeviceDepthSetting(PXCCapture::Device *device, Modality mode) {
