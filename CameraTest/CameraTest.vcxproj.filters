@@ -45,4 +45,8 @@
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\..\..\..\..\..\opencv\build\x64\vc12\bin\opencv_world300d.dll" />
+    <None Include="..\..\..\..\..\..\..\opencv\build\x64\vc12\bin\opencv_world300.dll" />
+  </ItemGroup>
 </Project>

@@ -118,6 +118,71 @@ void Reset()
 	points.clear();
 }
 
+string getTimeName(Feed feed)
+{
+	time_t t = time(0);
+	struct tm *now = localtime(&t);
+	char filename[80];
+	strftime(filename, 80, "%Y-%m-%d-%H-%M-%S", now);
+	string name = std::string(filename);
+
+	if (feed == COLOR)
+		name += "-color";
+	else if (feed == DEPTH)
+		name += "-depth";
+
+	return name;
+}
+
+void snapshot()
+{
+	const int WINDOW_WIDTH = 320;
+	const int WINDOW_HEIGHT = 240;
+	byte *buffer = (byte *)malloc(WINDOW_WIDTH*WINDOW_HEIGHT * 3);
+	if (!buffer)
+		return;
+
+
+	glReadPixels((GLint)0, (GLint)0, (GLint)WINDOW_WIDTH - 1, (GLint)WINDOW_HEIGHT - 1,
+		GL_RGB, GL_UNSIGNED_BYTE, buffer);
+
+	string imagename = getTimeName(feedType) + ".bmp";
+	const char * filename = imagename.c_str();
+	FILE *file = fopen(filename, "wb");
+	if (!file)
+		return;
+
+	BITMAPFILEHEADER bitmapFileHeader;
+	BITMAPINFOHEADER bitmapInfoHeader;
+
+	bitmapFileHeader.bfType = 0x4D42;
+	bitmapFileHeader.bfSize = WINDOW_WIDTH * WINDOW_HEIGHT * 3;
+	bitmapFileHeader.bfReserved1 = 0;
+	bitmapFileHeader.bfReserved2 = 0;
+	bitmapFileHeader.bfOffBits = sizeof(BITMAPFILEHEADER) + sizeof(BITMAPINFOHEADER);
+
+	bitmapInfoHeader.biSize = sizeof(BITMAPINFOHEADER);
+	bitmapInfoHeader.biWidth = WINDOW_WIDTH - 1;
+	bitmapInfoHeader.biHeight = WINDOW_HEIGHT - 1;
+	bitmapInfoHeader.biPlanes = 1;
+	bitmapInfoHeader.biBitCount = 24;
+	bitmapInfoHeader.biCompression = BI_RGB;
+	bitmapInfoHeader.biSizeImage = 0;
+	bitmapInfoHeader.biXPelsPerMeter = 0;
+	bitmapInfoHeader.biYPelsPerMeter = 0;
+	bitmapInfoHeader.biClrUsed = 0;
+	bitmapInfoHeader.biClrImportant = 0;
+
+	fwrite(&bitmapFileHeader, sizeof(BITMAPFILEHEADER), 1, file);
+	fwrite(&bitmapInfoHeader, sizeof(BITMAPINFOHEADER), 1, file);
+	fwrite(buffer, WINDOW_HEIGHT * WINDOW_WIDTH * 3, 1, file);
+	fclose(file);
+	free(buffer);
+
+
+
+}
+
 
 void clbKeys(unsigned char key, int x, int y)
 {
@@ -146,6 +211,10 @@ void clbKeys(unsigned char key, int x, int y)
 		currentFile.close();
 		currentFile.open(colorFile, fstream::out);
 		Reset();
+		break;
+	case 's': //take snapshot
+		cout << "Taking screenshot\n";
+		snapshot();
 		break;
 	}
 }
@@ -265,24 +334,13 @@ bool AllocateLocalBuffers()
 int main(int argc, WCHAR* argvW[])
 {
 	wcout << "RF_AugmentedRealitySP: Starts." << endl;
-	time_t t = time(0);
-	struct tm *now = localtime(&t);
-	char filename[80];
-	strftime(filename, 80, "%Y-%m-%d-%H-%M-%S", now);
-	string name = std::string(filename);
-
-	colorFile = name + "-colors.txt";
-	depthFile = name + "-depth.txt";
+	
+	
+	colorFile = getTimeName(COLOR) + ".txt";
+	depthFile = getTimeName(DEPTH) + ".txt";
 
 	currentFile.open(colorFile, fstream::out);
 	
-	if (!currentFile.is_open()) {
-		cout << "Log file not created";
-	}
-	else {
-		cout << "log file created? " << filename;
-	}
-
 	pScenePerceptionController.reset(new ScenePerceptionController(L"Augmented Reality SP", argc, argvW, L"",
 		COLOR_CAPTURE_WIDTH, COLOR_CAPTURE_HEIGHT, COLOR_FRAMERATE,
 		IMG_WIDTH, IMG_HEIGHT, DEPTH_FRAMERATE));

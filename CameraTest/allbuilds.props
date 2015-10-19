@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ImportGroup Label="PropertySheets" />
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <TargetExt>.exe</TargetExt>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);C:\opencv\build\include</IncludePath>
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <AdditionalIncludeDirectories>.;include;res;../common/include;../../include;$(RSSDK_DIR)/include;$(RSSDK_DIR)/sample/common/include;Resource;../common/freeglut/include;../common/freeglut/include/GL;../common/glew/include;../common/glew/include/GL;$(RSSDK_DIR)/sample/common/freeglut/include;$(RSSDK_DIR)/sample/common/freeglut/include/GL;$(RSSDK_DIR)/sample/common/glew/include;$(RSSDK_DIR)/sample/common/glew/include/GL;$(OPENCV_DIR)/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <DebugInformationFormat>OldStyle</DebugInformationFormat>
+      <MinimalRebuild>true</MinimalRebuild>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN64;_DEBUG;_CONSOLE;_WIN64_WINNT=0x0602;GLEW_STATIC;FREEGLUT_STATIC;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <ProgramDataBaseFileName>$(IntDir)vc$(PlatformToolsetVersion).pdb</ProgramDataBaseFileName>
+      <SDLCheck>true</SDLCheck>
+      <WarningLevel>Level3</WarningLevel>
+    </ClCompile>
+    <Link>
+      <IgnoreSpecificDefaultLibraries>libcmt.lib</IgnoreSpecificDefaultLibraries>
+      <AdditionalDependencies>libpxcmd_d.lib;libpxcutilsmd_d.lib;libpxc_d.lib;libpxcutils_d.lib;glew32s.lib;freeglut_static.lib;opencv_world300d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:/Program Files/PCL 1.7.2/lib;C:/Program Files/PCL 1.7.2/lib/$(Configuration);../common/lib/$(PlatformName)/$(PlatformToolset);../../lib/$(PlatformName);$(RSSDK_DIR)/lib/$(PlatformName);$(RSSDK_DIR)/sample/common/lib/$(PlatformName)/$(PlatformToolset);../common/freeglut/$(PlatformToolset)/$(PlatformName);../common/glew/$(PlatformToolset)/$(PlatformName);$(RSSDK_DIR)/sample/common/freeglut/$(PlatformToolset)/$(PlatformName);$(OPENCV_DIR)\lib;$(RSSDK_DIR)/sample/common/glew/$(PlatformToolset)/$(PlatformName);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <SubSystem>Console</SubSystem>
+    </Link>
+    <ProjectReference>
+      <LinkLibraryDependencies>true</LinkLibraryDependencies>
+    </ProjectReference>
+  </ItemDefinitionGroup>
+  <ItemGroup />
+</Project>

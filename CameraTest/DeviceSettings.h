@@ -1,4 +1,6 @@
 #pragma once
+#include <vector>
+#include <opencv2\core\types.hpp>
 
 enum Modality {
 	FACTORY_DEFAULT,
@@ -12,7 +14,9 @@ enum Modality {
 typedef struct Point {
 	int x;
 	int y;
+	int z;
 } Point;
+
 
 class DeviceSettings {
 public:
@@ -23,5 +27,5 @@ public:
 		short laserPower,
 		short motionRangeTradeoff,
 		PXCCapture::Device::IVCAMAccuracy accuracy);
-
+	void DeviceSettings::StereoCalibrate(std::vector<std::vector<cv::Point2f>> imagePoints, std::vector<std::vector<cv::Point2f>> imagePoints2, std::vector<std::vector<cv::Point3f>> objectPoints, cv::Size size);
 };

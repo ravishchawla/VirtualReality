@@ -6,11 +6,34 @@
 #include "util_render.h"
 #include <conio.h>
 #include "DeviceSettings.h"
+#include <opencv2/calib3d/calib3d.hpp>
+#include <opencv2/core/mat.hpp>
 using namespace std;
+using namespace cv;
 
-//void DeviceSettings::StereoCalibrate(vector<Point> imagePoints, vector<Point> image2Point, vector<Point> objectPoints) {
+
+void DeviceSettings::StereoCalibrate(vector<vector<Point2f>> imagePoints, vector<vector<Point2f>> imagePoints2, vector<vector<Point3f>> objectPoints, Size size) {
 	
-//}
+	Mat cameraMatrix[2];
+	
+	
+	cameraMatrix[0] = Mat::eye(3, 3, CV_32F);
+	cameraMatrix[1] = Mat::eye(3, 3, CV_32F);
+
+	Mat distortionCoefficients[2];
+	Mat rotationMatrix;
+	Mat translationVector;
+	Mat essentialMatrix;
+	Mat fundamentalMatrix;
+
+	TermCriteria term_crit = TermCriteria(TermCriteria::COUNT + TermCriteria::EPS, 30, 1e-6);
+	int flags = CALIB_FIX_INTRINSIC;
+
+	double rms = stereoCalibrate(objectPoints, imagePoints, imagePoints2, cameraMatrix[0], distortionCoefficients[0],
+		cameraMatrix[1], distortionCoefficients[1], size, rotationMatrix,
+		translationVector, essentialMatrix, fundamentalMatrix,
+		flags, term_crit);
+}
 
 void DeviceSettings::SetDeviceDepthSetting(PXCCapture::Device *device, Modality mode) {
 

@@ -1,4 +1,6 @@
-.txt
+*.txt
 ipch/
 *.sdf
-
+*.bmp
+*.log
+*.tlog
