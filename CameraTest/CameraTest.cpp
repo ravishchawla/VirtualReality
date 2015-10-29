@@ -57,8 +57,15 @@ int wmin(int argc, WCHAR* argv[]) {
 
 	//get device and reset it
 	PXCCapture::Device *device = session->QueryCaptureManager()->QueryDevice();
-	DeviceSettings::SetDeviceDepthSetting(device, Modality::FACTORY_DEFAULT);
+
+
+
+	PXCProjection *projection = device->CreateProjection();
+	std::cout << "proj: " << projection << std::endl;
+
+	//DeviceSettings::SetDeviceDepthSetting(device, Modality::FACTORY_DEFAULT);
 	device->ResetProperties(PXCCapture::STREAM_TYPE_ANY);
+
 
 	//stream data
 

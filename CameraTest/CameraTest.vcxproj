@@ -172,15 +172,19 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="CameraCalib.h" />
     <ClInclude Include="CameraTest.h" />
+    <ClInclude Include="CSVReader.h" />
     <ClInclude Include="DeviceSettings.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CameraTest.cpp" />
+    <ClCompile Include="CSVReader.cpp" />
     <ClCompile Include="DeviceSettings.cpp" />
-    <ClCompile Include="Glut.cpp" />
+    <ClCompile Include="CameraCalib.cpp" />
+    <ClCompile Include="Pose.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
