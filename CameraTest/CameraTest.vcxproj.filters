@@ -60,5 +60,6 @@
   <ItemGroup>
     <None Include="..\..\..\..\..\..\..\opencv\build\x64\vc12\bin\opencv_world300d.dll" />
     <None Include="..\..\..\..\..\..\..\opencv\build\x64\vc12\bin\opencv_world300.dll" />
+    <None Include="..\..\..\..\..\..\..\Program Files\PCL 1.7.2\bin\pcl_keypoints_release.dll" />
   </ItemGroup>
 </Project>

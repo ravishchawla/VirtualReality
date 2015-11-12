@@ -1,27 +1,9 @@
-﻿Build started 10/19/2015 3:21:13 PM.
+﻿Build started 11/10/2015 10:31:34 AM.
      1>Project "C:\Users\Ravish\Documents\Visual Studio 2015\Projects\VirtualReality\CameraTest\CameraTest.vcxproj" on node 2 (Build target(s)).
-     1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\x86_amd64\CL.exe /c /I. /Iinclude /Ires /I../common/include /I../../include /I"C:\Program Files (x86)\Intel\RSSDK\/include" /I"C:\Program Files (x86)\Intel\RSSDK\/sample/common/include" /IResource /I../common/freeglut/include /I../common/freeglut/include/GL /I../common/glew/include /I../common/glew/include/GL /I"C:\Program Files (x86)\Intel\RSSDK\/sample/common/freeglut/include" /I"C:\Program Files (x86)\Intel\RSSDK\/sample/common/freeglut/include/GL" /I"C:\Program Files (x86)\Intel\RSSDK\/sample/common/glew/include" /I"C:\Program Files (x86)\Intel\RSSDK\/sample/common/glew/include/GL" /IC:\opencv\build/include /Z7 /nologo /W3 /WX- /sdl /Od /D WIN64 /D _DEBUG /D _CONSOLE /D _WIN64_WINNT=0x0602 /D GLEW_STATIC /D FREEGLUT_STATIC /D _CRT_SECURE_NO_WARNINGS /D _UNICODE /D UNICODE /Gm /EHsc /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"x64\Debug\\" /Fd"x64\Debug\vc140.pdb" /Gd /TP /errorReport:prompt CameraTest.cpp DeviceSettings.cpp Glut.cpp
-     1>cl : Command line warning D9007: '/Gm' requires '/Zi or /ZI'; option ignored
-         CameraTest.cpp
-         DeviceSettings.cpp
-         Glut.cpp
-     1>Glut.cpp(218): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-     1>Glut.cpp(221): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-     1>Glut.cpp(224): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-     1>Glut.cpp(391): warning C4838: conversion from 'float' to 'int' requires a narrowing conversion
-     1>Glut.cpp(391): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
-     1>Glut.cpp(398): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-         Generating Code...
-       Link:
-         C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\x86_amd64\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\Ravish\Documents\Visual Studio 2015\Projects\VirtualReality\x64\Debug\CameraTest.exe" /INCREMENTAL:NO /NOLOGO /LIBPATH:"C:/Program Files/PCL 1.7.2/lib" /LIBPATH:"C:/Program Files/PCL 1.7.2/lib/Debug" /LIBPATH:../common/lib/x64/v140 /LIBPATH:../../lib/x64 /LIBPATH:"C:\Program Files (x86)\Intel\RSSDK\/lib/x64" /LIBPATH:"C:\Program Files (x86)\Intel\RSSDK\/sample/common/lib/x64/v140" /LIBPATH:../common/freeglut/v140/x64 /LIBPATH:../common/glew/v140/x64 /LIBPATH:"C:\Program Files (x86)\Intel\RSSDK\/sample/common/freeglut/v140/x64" /LIBPATH:C:\opencv\build\lib /LIBPATH:"C:\Program Files (x86)\Intel\RSSDK\/sample/common/glew/v140/x64" libpxcmd_d.lib libpxcutilsmd_d.lib libpxc_d.lib libpxcutils_d.lib glew32s.lib freeglut_static.lib opencv_world300d.lib libpxcmd_d.lib libpxcutilsmd_d.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /NODEFAULTLIB:libcmt.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /Debug /PDB:"C:\Users\Ravish\Documents\Visual Studio 2015\Projects\VirtualReality\x64\Debug\CameraTest.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\Ravish\Documents\Visual Studio 2015\Projects\VirtualReality\x64\Debug\CameraTest.lib" /MACHINE:X64 x64\Debug\CameraTest.obj
-         x64\Debug\DeviceSettings.obj
-         x64\Debug\Glut.obj
-         x64\Debug\stdafx.obj
-     1>glew32s.lib(glew.obj) : warning LNK4099: PDB 'glew_static.pdb' was not found with 'glew32s.lib(glew.obj)' or at 'C:\Users\Ravish\Documents\Visual Studio 2015\Projects\VirtualReality\x64\Debug\glew_static.pdb'; linking object as if no debug info
+     1>Link:
          CameraTest.vcxproj -> C:\Users\Ravish\Documents\Visual Studio 2015\Projects\VirtualReality\x64\Debug\CameraTest.exe
      1>Done Building Project "C:\Users\Ravish\Documents\Visual Studio 2015\Projects\VirtualReality\CameraTest\CameraTest.vcxproj" (Build target(s)).
 
 Build succeeded.
 
-Time Elapsed 00:00:04.95
+Time Elapsed 00:00:00.32

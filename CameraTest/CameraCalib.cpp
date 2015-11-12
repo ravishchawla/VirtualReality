@@ -157,14 +157,13 @@ void CameraCalib::translatePoints(Feed type) {
 	PXCImage::ImageInfo dInfo = depthImage->QueryInfo();
 	PXCImage::ImageInfo cInfo = colorImage->QueryInfo();
 	std::vector<PXCPoint3DF32> translatedPoints(points.size());
-
+	std::vector<PXCPoint3DF32> pointsDepth = std::vector<PXCPoint3DF32>(points.size());
 	if (type == DEPTH1 || type == DEPTH2) {
 
 		PXCImage::ImageData depthData;
 		if (depthImage->AcquireAccess(PXCImage::ACCESS_READ, PXCImage::PIXEL_FORMAT_DEPTH, &depthData) >= PXC_STATUS_NO_ERROR) {
 			unsigned short *depthBuffer = (unsigned short*)depthData.planes[0];
 
-			std::vector<PXCPoint3DF32> pointsDepth = std::vector<PXCPoint3DF32>(points.size());
 
 			for (int i = 0; i < points.size(); i++) {
 				pointsDepth[i].x = points[i].x;
@@ -172,6 +171,7 @@ void CameraCalib::translatePoints(Feed type) {
 
 				int zloc = points[i].y * IMG_WIDTH + points[i].x;
 				pointsDepth[i].z = depthBuffer[zloc];
+				std::cout << "D: " << depthBuffer[zloc] << std::endl;
 			}
 			
 			depthImage->ReleaseAccess(&depthData);
@@ -184,12 +184,16 @@ void CameraCalib::translatePoints(Feed type) {
 				std::cout << "unsuccessful translation" << std::endl;
 			}
 		}
+		else {
+			std::cout << "incorrect mode - switch to depth" << std::endl;
+		}
 	}
 		
 	for (int i = 0; i < points.size(); i++) {
+		//std::cout << pointsDepth[i].x << ", " << pointsDepth[i].y << ", " << pointsDepth[i].z << std::endl;
 		std::cout << translatedPoints[i].x << ", " << translatedPoints[i].y << ", " << translatedPoints[i].z<< std::endl;
 	}
-
+		
 }
 
 void CameraCalib::switchMode(Feed type, boolean writeToFile) {
