@@ -1,0 +1,45 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Project ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="C:\Users\Ravish\Documents\Visual Studio 2015\Projects\rs\src\real_sense\real_sense_device_manager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Ravish\Documents\Visual Studio 2015\Projects\rs\src\real_sense_grabber.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Ravish\Documents\Visual Studio 2015\Projects\rs\src\io_exception.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="C:\Users\Ravish\Documents\Visual Studio 2015\Projects\rs\include\io_exception.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Ravish\Documents\Visual Studio 2015\Projects\rs\include\real_sense_grabber.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Ravish\Documents\Visual Studio 2015\Projects\rs\include\buffers.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Ravish\Documents\Visual Studio 2015\Projects\rs\include\impl\buffers.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Ravish\Documents\Visual Studio 2015\Projects\rs\include\real_sense\real_sense_device_manager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Ravish\Documents\Visual Studio 2015\Projects\rs\include\real_sense\time.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="C:\Users\Ravish\Documents\Visual Studio 2015\Projects\rs\CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{43DD9CD2-78D8-446E-B0AB-75F6B4B280AC}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{D0A401A3-25AD-427D-81CC-F8FBB02FD88D}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

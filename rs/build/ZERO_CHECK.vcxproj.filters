@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Project ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <CustomBuild Include="C:\Users\Ravish\Documents\Visual Studio 2015\Projects\VirtualReality\rs\build\CMakeFiles\2ab5c1e2ca3d304ffcdc1c8dda650af4\generate.stamp.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="CMake Rules">
+      <UniqueIdentifier>{59FD16F5-CB20-457E-BBF6-C90B287E1CFA}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>
