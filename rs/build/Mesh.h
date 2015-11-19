@@ -19,6 +19,7 @@
 
 #include <pcl/keypoints/sift_keypoint.h>
 #include <pcl/keypoints/harris_3d.h>
+#include <pcl/segmentation/segment_differences.h>
 
 #include <Eigen/Geometry>
 #include "real_sense_grabber.h"
@@ -80,6 +81,7 @@ private:
 	void loadTransformFromFile(int dim = 3);
 	void visualizeCADFile();
 	void transformPointCloud(typename PointCloudT::Ptr cloud, Eigen::Matrix4f *transform);
+	void subtractPointClouds(typename PointCloudT::Ptr cloud_a, typename PointCloudT::Ptr cloud_b);
 
 	bool filtering_on = false;
 	MODE VIEWER_MODE = MODE::USE_GRABBER;

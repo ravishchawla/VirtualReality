@@ -121,6 +121,9 @@ Mesh<Point3DC>::keyboardCallback(const pcl::visualization::KeyboardEvent &event,
 			VIEWER_MODE = MODE::USE_CAD;
 			Mesh<Point3DC>::visualizeCADFile();
 			std::cout << "key point: " << (*new_cloud) << std::endl;
+
+			boost::shared_ptr<typename PointCloudT> t_cloud(boost::const_pointer_cast<typename PointCloudT>(last_cloud));
+			subtractPointClouds(t_cloud, cad_cloud);
 		}
 		else if (event.getKeyCode() == 'C' || event.getKeyCode() == 'C') {
 			std::cout << (*new_cloud) << std::endl;
@@ -262,6 +265,21 @@ Mesh<Point3DC>::transformPointCloud(typename PointCloudT::Ptr cloud, Eigen::Matr
 	*cloud = *transform_cloud;
 }
 
+template<> void
+Mesh<Point3DC>::subtractPointClouds(typename PointCloudT::Ptr cloud_a, typename PointCloudT::Ptr cloud_b) {
+	pcl::SegmentDifferences<Point3DC> *subtractor = &pcl::SegmentDifferences<Point3DC>();
+	subtractor->setInputCloud(cloud_a);
+	subtractor->setTargetCloud(cloud_b);
+
+	pcl::search::KdTree<Point3DC>::Ptr tree(new pcl::search::KdTree<Point3DC>());
+	subtractor->setSearchMethod(tree);
+
+	
+	pcl::PointCloud<Point3DC>::Ptr out_cloud =  boost::make_shared < pcl::PointCloud<Point3DC>>();
+	subtractor->segment(*out_cloud);
+	std::cout << "Differences calculated: " << *out_cloud << std::endl;
+
+}
 
 
 int main(int argx, char** argv)
