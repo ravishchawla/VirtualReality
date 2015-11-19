@@ -1,15 +1,15 @@
 #include "CameraCalib.h"
 
-void CameraCalib::clbReshape(int width, int height)
-{
+void
+CameraCalib::clbReshape(int width, int height) {
 	glutReshapeWindow(windowRect[0], windowRect[1]);
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 	glOrtho(0, width, height, 0, -1, 1);
 }
 
-void CameraCalib::exitFunc(int returnCode)
-{
+void
+CameraCalib::exitFunc(int returnCode) {
 	if (mainWnd >= 1)
 	{
 		glutDestroyWindow(mainWnd);
@@ -20,7 +20,7 @@ void CameraCalib::exitFunc(int returnCode)
 	verticesImage.reset(nullptr);
 	depthFromVerticesImage.reset(nullptr);
 
-	std::wcout << L"RF_AugmentedRealitySP: Ends" << std::endl;
+	std::wcout << L"CameraCalib: Ends" << std::endl;
 	if (currentFile.is_open())
 		currentFile.flush();
 		currentFile.close();
@@ -28,14 +28,14 @@ void CameraCalib::exitFunc(int returnCode)
 	exit(returnCode);
 }
 
-void CameraCalib::clbExitFunc()
-{
+void
+CameraCalib::clbExitFunc() {
 	exitFunc(0);
 }
 
 
-void CameraCalib::Reset()
-{
+void
+CameraCalib::Reset() {
 	trackingStatus = PXCScenePerception::TrackingAccuracy::FAILED;
 	pScenePerceptionController->PauseScenePerception(true);
 	points.clear();
@@ -48,8 +48,8 @@ void CameraCalib::Reset()
 
 }
 
-std::string CameraCalib::getTimeName(Feed feed)
-{
+std::string
+CameraCalib::getTimeName(Feed feed) {
 	time_t t = time(0);
 	struct tm *now = localtime(&t);
 	char filename[80];
@@ -71,8 +71,8 @@ std::string CameraCalib::getTimeName(Feed feed)
 	return name;
 }
 
-void CameraCalib::snapshot()
-{
+void
+CameraCalib::snapshot() {
 	const int WINDOW_WIDTH = 320;
 	const int WINDOW_HEIGHT = 240;
 	byte *buffer = (byte *)malloc(WINDOW_WIDTH*WINDOW_HEIGHT * 3);
@@ -120,7 +120,8 @@ void CameraCalib::snapshot()
 
 }
 
-void CameraCalib::read3dPoints(std::string filename, std::vector<cv::Point3f> *list) {
+void
+CameraCalib::read3dPoints(std::string filename, std::vector<cv::Point3f> *list) {
 	std::ifstream dfile(filename);
 	std::string line;
 	int n;
@@ -143,15 +144,24 @@ void CameraCalib::read3dPoints(std::string filename, std::vector<cv::Point3f> *l
 	}
 }
 
-void CameraCalib::read3dPoints() {
+void
+CameraCalib::read3dPoints() {
 	objectPoints.push_back(std::vector<cv::Point3f>());
 	objectPoints.push_back(std::vector<cv::Point3f>());
 
 	read3dPoints("3dpoints1.txt", &objectPoints[0]);
 	read3dPoints("3dpoints2.txt", &objectPoints[1]);
 }
- 
-void CameraCalib::translatePoints(Feed type) {
+
+void
+translateColorToDepth(std::vector<cv::Point>) {
+	PXCProjection *projection = device->CreateProjection();
+
+}
+
+void
+CameraCalib::translatePoints(Feed type)
+{
 	PXCProjection *projection = device->CreateProjection();	
 
 	PXCImage::ImageInfo dInfo = depthImage->QueryInfo();
@@ -196,7 +206,8 @@ void CameraCalib::translatePoints(Feed type) {
 		
 }
 
-void CameraCalib::switchMode(Feed type, boolean writeToFile) {
+void
+CameraCalib::switchMode(Feed type, boolean writeToFile) {
 	std::cout << "Change mode to " << type << std::endl;
 	feedType = type;
 
@@ -229,8 +240,8 @@ void CameraCalib::switchMode(Feed type, boolean writeToFile) {
 	}
 }
 
-void CameraCalib::clbKeys(unsigned char key, int x, int y)
-{
+void
+CameraCalib::clbKeys(unsigned char key, int x, int y) {
 	switch (key)
 	{
 	case 'q': // quit
@@ -242,13 +253,13 @@ void CameraCalib::clbKeys(unsigned char key, int x, int y)
 		CameraCalib::Reset();
 		break;
 	case 'd': //switch to depth mode
-		CameraCalib::switchMode(DEPTH1, false);
+		CameraCalib::switchMode(DEPTH1, true);
 		break;
 	case 'p':
 		CameraCalib::translatePoints(feedType);
 		break;
 	case 'c': //switch to color mode
-		CameraCalib::switchMode(COLOR1, false);
+		CameraCalib::switchMode(COLOR1, true);
 		break;
 	case 'k': //take snapshot
 		std::cout << "Taking screenshot\n";
@@ -291,15 +302,15 @@ void CameraCalib::clbKeys(unsigned char key, int x, int y)
 	}
 }
 
-void CameraCalib::StartScenePerception()
-{
+void
+CameraCalib::StartScenePerception() {
 	pScenePerceptionController->ResetScenePerception();
 	pScenePerceptionController->PauseScenePerception(false);
 	imageQuality = 0.0f;
 }
 
-void CameraCalib::clbDisplay(void)
-{
+void
+CameraCalib::clbDisplay(void) {
 	StartScenePerception();
 
 	if (!pScenePerceptionController->ProcessNextFrame(&sample, curPose, trackingStatus, imageQuality))
@@ -350,8 +361,8 @@ void CameraCalib::clbDisplay(void)
 	glutPostRedisplay();
 }
 
-void CameraCalib::clbMouse(int clickedbutton, int clickState, int x, int y)
-{
+void
+CameraCalib::clbMouse(int clickedbutton, int clickState, int x, int y) {
 	if (GLUT_LEFT_BUTTON == clickedbutton && GLUT_DOWN == clickState)
 	{
 		std::cout << "X: " << x << " Y: " << y << "\n";	
@@ -370,8 +381,8 @@ void CameraCalib::clbMouse(int clickedbutton, int clickState, int x, int y)
 	}
 }
 
-bool CameraCalib::InitGlutUI(int argc, WCHAR* argvW[])
-{
+bool
+CameraCalib::InitGlutUI(int argc, WCHAR* argvW[]) {
 	srand(unsigned int(time(NULL)));
 
 	const size_t len = wcsnlen(argvW[0], 1024);
@@ -386,12 +397,12 @@ bool CameraCalib::InitGlutUI(int argc, WCHAR* argvW[])
 	glutInit(&argc, argv);
 	glutInitWindowSize(windowRect[0], windowRect[1]);
 	glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE | GLUT_DEPTH); //
-	mainWnd = glutCreateWindow("Intel(R) RealSense(TM) SDK: SP Augmented Reality");
+	mainWnd = glutCreateWindow("CameraCalib");
 
 	GLenum err = glewInit();
 	if (GLEW_OK != err)
 	{
-		std::wcout << L"RF_AugmentedRealitySP: Error - " << glewGetErrorString(err) << std::endl;
+		std::wcout << L"Camera Calib" << glewGetErrorString(err) << std::endl;
 		return false;
 	}
 	
@@ -405,8 +416,8 @@ bool CameraCalib::InitGlutUI(int argc, WCHAR* argvW[])
 	return true;
 }
 
-bool CameraCalib::AllocateLocalBuffers()
-{
+bool
+CameraCalib::AllocateLocalBuffers() {
 	camBgraImage.reset(new unsigned char[4 * IMG_WIDTH * IMG_HEIGHT]);
 	camDepImage.reset(new unsigned short[IMG_WIDTH * IMG_HEIGHT]);
 	verticesImage.reset(new float[3 * IMG_WIDTH * IMG_HEIGHT]);
@@ -414,8 +425,8 @@ bool CameraCalib::AllocateLocalBuffers()
 	return true;
 }
 
-int main(int argc, WCHAR* argvW[])
-{
+int
+main(int argc, WCHAR* argvW[]) {
 	std::wcout << "Depth/Color Opengl Rendering" << std::endl;
 	
 	session = PXCSenseManager::CreateInstance();
@@ -467,7 +478,7 @@ int main(int argc, WCHAR* argvW[])
 	feedType = DEPTH1;
 	if (pScenePerceptionController->InitializeProjection() < PXC_STATUS_NO_ERROR)
 	{
-		std::wcout << L"RF_AugmentedRealitySP: Create Projection Failed" << std::endl;
+		std::wcout << L"CameraCalib: Create Projection Failed" << std::endl;
 		return 1;
 	}
 

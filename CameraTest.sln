@@ -5,9 +5,9 @@ VisualStudioVersion = 14.0.23107.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CameraTest", "CameraTest\CameraTest.vcxproj", "{B9268253-27F5-4E99-89FD-9853B38CF6A9}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "real_sense_viewer", "..\rs\build\real_sense_viewer.vcxproj", "{FDB501F4-D581-4067-82F5-F652B72A5C5D}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "real_sense", "rs\build\real_sense.vcxproj", "{6503227D-7309-4054-9C6C-26666D7B51DC}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "real_sense", "..\rs\build\real_sense.vcxproj", "{6503227D-7309-4054-9C6C-26666D7B51DC}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "real_sense_viewer", "rs\build\real_sense_viewer.vcxproj", "{FDB501F4-D581-4067-82F5-F652B72A5C5D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -37,18 +37,6 @@ Global
 		{B9268253-27F5-4E99-89FD-9853B38CF6A9}.RelWithDebInfo|x64.Build.0 = Release|x64
 		{B9268253-27F5-4E99-89FD-9853B38CF6A9}.RelWithDebInfo|x86.ActiveCfg = Release|Win32
 		{B9268253-27F5-4E99-89FD-9853B38CF6A9}.RelWithDebInfo|x86.Build.0 = Release|Win32
-		{FDB501F4-D581-4067-82F5-F652B72A5C5D}.Debug|x64.ActiveCfg = Debug|x64
-		{FDB501F4-D581-4067-82F5-F652B72A5C5D}.Debug|x64.Build.0 = Debug|x64
-		{FDB501F4-D581-4067-82F5-F652B72A5C5D}.Debug|x86.ActiveCfg = Debug|x64
-		{FDB501F4-D581-4067-82F5-F652B72A5C5D}.MinSizeRel|x64.ActiveCfg = MinSizeRel|x64
-		{FDB501F4-D581-4067-82F5-F652B72A5C5D}.MinSizeRel|x64.Build.0 = MinSizeRel|x64
-		{FDB501F4-D581-4067-82F5-F652B72A5C5D}.MinSizeRel|x86.ActiveCfg = MinSizeRel|x64
-		{FDB501F4-D581-4067-82F5-F652B72A5C5D}.Release|x64.ActiveCfg = Release|x64
-		{FDB501F4-D581-4067-82F5-F652B72A5C5D}.Release|x64.Build.0 = Release|x64
-		{FDB501F4-D581-4067-82F5-F652B72A5C5D}.Release|x86.ActiveCfg = Release|x64
-		{FDB501F4-D581-4067-82F5-F652B72A5C5D}.RelWithDebInfo|x64.ActiveCfg = RelWithDebInfo|x64
-		{FDB501F4-D581-4067-82F5-F652B72A5C5D}.RelWithDebInfo|x64.Build.0 = RelWithDebInfo|x64
-		{FDB501F4-D581-4067-82F5-F652B72A5C5D}.RelWithDebInfo|x86.ActiveCfg = RelWithDebInfo|x64
 		{6503227D-7309-4054-9C6C-26666D7B51DC}.Debug|x64.ActiveCfg = Debug|x64
 		{6503227D-7309-4054-9C6C-26666D7B51DC}.Debug|x64.Build.0 = Debug|x64
 		{6503227D-7309-4054-9C6C-26666D7B51DC}.Debug|x86.ActiveCfg = Debug|x64
@@ -61,6 +49,18 @@ Global
 		{6503227D-7309-4054-9C6C-26666D7B51DC}.RelWithDebInfo|x64.ActiveCfg = RelWithDebInfo|x64
 		{6503227D-7309-4054-9C6C-26666D7B51DC}.RelWithDebInfo|x64.Build.0 = RelWithDebInfo|x64
 		{6503227D-7309-4054-9C6C-26666D7B51DC}.RelWithDebInfo|x86.ActiveCfg = RelWithDebInfo|x64
+		{FDB501F4-D581-4067-82F5-F652B72A5C5D}.Debug|x64.ActiveCfg = Debug|x64
+		{FDB501F4-D581-4067-82F5-F652B72A5C5D}.Debug|x64.Build.0 = Debug|x64
+		{FDB501F4-D581-4067-82F5-F652B72A5C5D}.Debug|x86.ActiveCfg = Debug|x64
+		{FDB501F4-D581-4067-82F5-F652B72A5C5D}.MinSizeRel|x64.ActiveCfg = MinSizeRel|x64
+		{FDB501F4-D581-4067-82F5-F652B72A5C5D}.MinSizeRel|x64.Build.0 = MinSizeRel|x64
+		{FDB501F4-D581-4067-82F5-F652B72A5C5D}.MinSizeRel|x86.ActiveCfg = MinSizeRel|x64
+		{FDB501F4-D581-4067-82F5-F652B72A5C5D}.Release|x64.ActiveCfg = Release|x64
+		{FDB501F4-D581-4067-82F5-F652B72A5C5D}.Release|x64.Build.0 = Release|x64
+		{FDB501F4-D581-4067-82F5-F652B72A5C5D}.Release|x86.ActiveCfg = Release|x64
+		{FDB501F4-D581-4067-82F5-F652B72A5C5D}.RelWithDebInfo|x64.ActiveCfg = RelWithDebInfo|x64
+		{FDB501F4-D581-4067-82F5-F652B72A5C5D}.RelWithDebInfo|x64.Build.0 = RelWithDebInfo|x64
+		{FDB501F4-D581-4067-82F5-F652B72A5C5D}.RelWithDebInfo|x86.ActiveCfg = RelWithDebInfo|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -11,7 +11,8 @@
 #include <time.h>
 
 
-void wmain2(int argc, WCHAR* argvW[]) {
+void
+wmain2(int argc, WCHAR* argvW[]) {
 
 		int c;
 		c = 0;
@@ -95,7 +96,8 @@ void wmain2(int argc, WCHAR* argvW[]) {
 
 }
 
-void DeviceSettings::StereoCalibrate(std::vector<std::vector<cv::Point2f>> imagePoints, std::vector<std::vector<cv::Point2f>> imagePoints2, std::vector<std::vector<cv::Point3f>> objectPoints, cv::Size size, std::fstream *outfile) {
+void
+DeviceSettings::StereoCalibrate(std::vector<std::vector<cv::Point2f>> imagePoints, std::vector<std::vector<cv::Point2f>> imagePoints2, std::vector<std::vector<cv::Point3f>> objectPoints, cv::Size size, std::fstream *outfile) {
 	
 	cv::Mat cameraMatrix[2];
 	cameraMatrix[0] = cv::Mat::eye(3, 3, CV_32F);
@@ -137,7 +139,8 @@ void DeviceSettings::StereoCalibrate(std::vector<std::vector<cv::Point2f>> image
 	*outfile << "fundamental matrix: " << fundamentalMatrix << std::endl;
 }
 
-void DeviceSettings::SetDeviceDepthSetting(PXCCapture::Device *device, Modality mode) {
+void
+DeviceSettings::SetDeviceDepthSetting(PXCCapture::Device *device, Modality mode) {
 
 	switch (mode) {
 	case Modality::FACE_TRACKING:
@@ -164,7 +167,8 @@ void DeviceSettings::SetDeviceDepthSetting(PXCCapture::Device *device, Modality 
 	
 }
 
-bool DeviceSettings::SolvePose(std::vector<PXCPoint3DF32> objectPoints, std::vector<PXCPointF32> imagePoints) {
+bool
+DeviceSettings::SolvePose(std::vector<PXCPoint3DF32> objectPoints, std::vector<PXCPointF32> imagePoints) {
 	
 	std::vector<cv::Point3f> objPoints(objectPoints.size());
 	std::vector<cv::Point2f> imgPoints(imagePoints.size());
@@ -203,7 +207,8 @@ bool DeviceSettings::SolvePose(std::vector<PXCPoint3DF32> objectPoints, std::vec
 	return result;
 }
 /*do not call this method, its risky*/
-void DeviceSettings::SetDepthSettingValues(PXCCapture::Device *device, short confidenceThreshold, short filterOption, short laserPower, short motionRangeTradeoff, PXCCapture::Device::IVCAMAccuracy accuracy) {
+void
+DeviceSettings::SetDepthSettingValues(PXCCapture::Device *device, short confidenceThreshold, short filterOption, short laserPower, short motionRangeTradeoff, PXCCapture::Device::IVCAMAccuracy accuracy) {
 	device->SetDepthConfidenceThreshold(confidenceThreshold);
 	device->SetIVCAMFilterOption(filterOption);
 	device->SetIVCAMLaserPower(laserPower);
