@@ -24,33 +24,26 @@ Mesh<Point3DC>::~Mesh()
 template<> void
 Mesh<Point3DC>::run() {
 	boost::function<void(const typename PointCloudT::ConstPtr&)> f = boost::bind(&Mesh<Point3DC>::cloudCallback, this, _1);
-	std::cout << grabber.getName() << std::endl;
-	std::cout << f << std::endl;
-	if (VIEWER_MODE == MODE::USE_GRABBER)
-	{
-	connection = grabber.registerCallback(f);
-	grabber.start();
+	
+	if (VIEWER_MODE == MODE::USE_GRABBER) {
+		connection = grabber.registerCallback(f);
+		grabber.start();
 	}
 	
-	else if (VIEWER_MODE == MODE::USE_CAD)
-	{
-	if (affine_transformation == NULL)
-	{
-	loadTransformFromFile(3);
-	}
+	while (!viewer.wasStopped()) {
+		if (VIEWER_MODE == MODE::USE_CAD) {
+			if (affine_transformation == NULL) {
+				loadTransformFromFile(4);
+			}
 
-	transformPointCloud(cad_cloud, affine_transformation);
+			transformPointCloud(cad_cloud, affine_transformation);
 
-	}
-	
-	while (!viewer.wasStopped())
-	{
-		if (new_cloud)
-		{
+		}
+
+		if (new_cloud) {
 			boost::mutex::scoped_lock lock(new_cloud_mutex);
 
-			if (filtering_on == true)
-			{
+			if (filtering_on == true) {
 				sor.setInputCloud(new_cloud);
 				sor.filter(*filter_cloud);
 
@@ -60,17 +53,23 @@ Mesh<Point3DC>::run() {
 					viewer.setPointCloudRenderingProperties(pcl::visualization::PCL_VISUALIZER_POINT_SIZE, 2, "cloud");
 				}
 			}
-			else
-			{
-				if (!viewer.updatePointCloud(new_cloud, "cloud"))
-				{
-					viewer.addPointCloud(new_cloud, "cloud");
-					viewer.setPointCloudRenderingProperties(pcl::visualization::PCL_VISUALIZER_POINT_SIZE, 2, "cloud");
+			else {
+
+				if (VIEWER_MODE == MODE::USE_CAD) {
+					if (!viewer.updatePointCloud(cad_cloud, "cloud")) {
+						viewer.addPointCloud(cad_cloud, "cloud");
+						viewer.setPointCloudRenderingProperties(pcl::visualization::PCL_VISUALIZER_POINT_SIZE, 2, "cloud");
+					}
+				}
+				else {
+					if (!viewer.updatePointCloud(new_cloud, "cloud")) {
+						viewer.addPointCloud(new_cloud, "cloud");
+						viewer.setPointCloudRenderingProperties(pcl::visualization::PCL_VISUALIZER_POINT_SIZE, 2, "cloud");
+					}
 				}
 			}
 
-			if (keys_found && !viewer.updatePointCloud(key_cloud, "keypoints"))
-			{
+			if (keys_found && !viewer.updatePointCloud(key_cloud, "keypoints")) {
 				viewer.addPointCloud(key_cloud, "keypoints");
 				viewer.setPointCloudRenderingProperties(pcl::visualization::PCL_VISUALIZER_POINT_SIZE, 10, "keypoints");
 				viewer.setPointCloudRenderingProperties(pcl::visualization::PCL_VISUALIZER_COLOR, 1.0, 0.0, 0.0, "keypoints");
@@ -78,7 +77,9 @@ Mesh<Point3DC>::run() {
 			}
 
 			last_cloud = new_cloud;
-			new_cloud.reset();
+			
+			if(VIEWER_MODE == MODE::USE_GRABBER)
+				new_cloud.reset();
 		}
 		viewer.spinOnce(1, true);
 	}
@@ -100,32 +101,31 @@ Mesh<Point3DC>::cloudCallback(typename PointCloudT::ConstPtr cloud) {
 
 template<> void
 Mesh<Point3DC>::keyboardCallback(const pcl::visualization::KeyboardEvent &event, void*) {
-	if (event.keyDown())
-	{
-		if (event.getKeyCode() == 's' || event.getKeyCode() == 'S')
-		{
+	if (event.keyDown()) {
+		if (event.getKeyCode() == 's' || event.getKeyCode() == 'S') {
 			boost::format fmt("RS_%s_%u.pcd");
 			std::string fn = boost::str(fmt % grabber.getDeviceSerialNumber().c_str() % last_cloud->header.stamp);
 			pcl::io::savePCDFileBinaryCompressed(fn, *last_cloud);
 			std::cout << "Saved point cloud " << fn.c_str() << std::endl;
 		}
 
-		else if (event.getKeyCode() == 'k' || event.getKeyCode() == 'K')
-		{
+		else if (event.getKeyCode() == 'k' || event.getKeyCode() == 'K') {
 			Mesh<Point3DC>::findKeyPoints(last_cloud);
 		}
-		else if (event.getKeyCode() == 'f' || event.getKeyCode() == 'F')
-		{
+		else if (event.getKeyCode() == 'f' || event.getKeyCode() == 'F') {
 			filtering_on = !filtering_on;
 			std::string status = (filtering_on == true) ? "on" : "off";
 			std::cout << "filtering turned to " << status << std::endl;
 		}
-		else if (event.getKeyCode() == 'v' || event.getKeyCode() == 'V')
-		{
+		else if (event.getKeyCode() == 'v' || event.getKeyCode() == 'V') {
+			VIEWER_MODE = MODE::USE_CAD;
 			Mesh<Point3DC>::visualizeCADFile();
+			std::cout << "key point: " << (*new_cloud) << std::endl;
 		}
-
-	}
+		else if (event.getKeyCode() == 'C' || event.getKeyCode() == 'C') {
+			std::cout << (*new_cloud) << std::endl;
+		}
+	}		
 }
 
 template<> void
@@ -180,6 +180,7 @@ Mesh<Point3DC>::findKeyPoints(typename PointCloudT::ConstPtr cloud) {
 template<> void
 Mesh<Point3DC>::loadCADFromFile(std::string filename) {
 	int success;
+	
 	try
 	{
 		pcl::PointCloud<pcl::PointXYZ>::Ptr temp_cloud;
@@ -194,7 +195,9 @@ Mesh<Point3DC>::loadCADFromFile(std::string filename) {
 		}
 
 		pcl::copyPointCloud(*temp_cloud, *cad_cloud);
-		std::cout << "Completed conversion : " << (*cad_cloud);
+
+
+		std::cout << "Completed conversion : " << (*cad_cloud) << std::endl;
 	}
 	catch (std::exception exe)
 	{
@@ -208,24 +211,26 @@ Mesh<Point3DC>::loadTransformFromFile(int dim) {
 	std::string filename = "transform.txt";
 	std::ifstream dfile(filename);
 	std::string line;
-	int n;
+	
 	std::stringstream stream;
-	affine_transformation = &Eigen::Affine3d();
+	affine_transformation = &Eigen::Matrix4f();
 	int row = 0;
 	int col = 0;
+	std::deque<int> int_list;
 	if (dfile.is_open()) {
 		while (getline(dfile, line)) {
-			while (col <= dim)
-			{
-				stream = std::stringstream(line);
-				stream >> n;
-				(*affine_transformation)(row, col++) = n;
+			char *tokens = std::strtok(&line[0u], ",");
+			while (tokens != NULL) {
+				(*affine_transformation)(row, col) = std::atof(tokens);
+				//std::cout << std::atof(tokens) << std::endl;
+				tokens = std::strtok(NULL, " ");
 			}
-			col = 0;
 			row++;
 		}
 		dfile.close();
 	}
+
+
 }
 
 template<> void
@@ -233,19 +238,26 @@ Mesh<Point3DC>::visualizeCADFile() {
 	if (cad_cloud->empty()) {
 		loadCADFromFile(cad_filename);
 	}	
-	
+
 	if (grabber.isRunning() == true) {
 		grabber.stop();
 	}
 
-	new_cloud = cad_cloud;
+	/*for (int i = 0; i < cad_cloud->height; i++) {
+		for (int j = 0; j < cad_cloud->width; j++) {
+			std::cout << cad_cloud->at(j, i).x << cad_cloud->at(j, i).y << cad_cloud->at(j, i).z << "\n";
+		}
+	}
+	*/
+	std::cout << "visualizing complete: " << (*new_cloud) << std::endl;
 }
 
 template<> void
-Mesh<Point3DC>::transformPointCloud(typename PointCloudT::Ptr cloud, Eigen::Affine3d *transform) {
+Mesh<Point3DC>::transformPointCloud(typename PointCloudT::Ptr cloud, Eigen::Matrix4f *transform) {
 	PointCloudT::Ptr transform_cloud;
 	transform_cloud = boost::make_shared<pcl::PointCloud<Point3DC>>();
 	pcl::transformPointCloud(*cloud, *transform_cloud, *transform);
+	
 
 	*cloud = *transform_cloud;
 }

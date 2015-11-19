@@ -1,5 +1,7 @@
 #pragma once
 #include <iostream>
+#include <string>
+
 
 #include <boost/format.hpp>
 #include <boost/shared_ptr.hpp>
@@ -68,7 +70,7 @@ private:
 	typename PointCloudT::Ptr cad_cloud;
 	bool keys_found = false;
 
-	Eigen::Affine3d *affine_transformation;
+	Eigen::Matrix4f *affine_transformation = NULL;
 	
 	void cloudCallback(typename PointCloudT::ConstPtr cloud);
 	void keyboardCallback(const pcl::visualization::KeyboardEvent & event, void*);
@@ -77,7 +79,7 @@ private:
 	void loadCADFromFile(std::string filename);
 	void loadTransformFromFile(int dim = 3);
 	void visualizeCADFile();
-	void transformPointCloud(typename PointCloudT::Ptr cloud, Eigen::Affine3d *transform);
+	void transformPointCloud(typename PointCloudT::Ptr cloud, Eigen::Matrix4f *transform);
 
 	bool filtering_on = false;
 	MODE VIEWER_MODE = MODE::USE_GRABBER;
