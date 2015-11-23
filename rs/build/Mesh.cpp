@@ -36,51 +36,55 @@ Mesh<Point3DC>::run() {
 				loadTransformFromFile(4);
 			}
 
-			transformPointCloud(cad_cloud, affine_transformation);
+			//transformPointCloud(cad_cloud, affine_transformation);
 
 		}
 
-		if (new_cloud) {
-			boost::mutex::scoped_lock lock(new_cloud_mutex);
+		boost::mutex::scoped_lock lock(new_cloud_mutex);
 
-			if (filtering_on == true) {
-				sor.setInputCloud(new_cloud);
-				sor.filter(*filter_cloud);
+		if (filtering_on == true) {
+			sor.setInputCloud(new_cloud);
+			sor.filter(*filter_cloud);
 
-				if (!viewer.updatePointCloud(filter_cloud, "cloud"))
-				{
-					viewer.addPointCloud(filter_cloud, "cloud");
+			if (filter_cloud && !viewer.updatePointCloud(filter_cloud, "cloud"))
+			{
+				viewer.addPointCloud(filter_cloud, "cloud");
+				viewer.setPointCloudRenderingProperties(pcl::visualization::PCL_VISUALIZER_POINT_SIZE, 2, "cloud");
+			}
+		}
+		else {
+
+			if (VIEWER_MODE == MODE::USE_CAD) {
+				bool donen = false;
+				//std::cout << "mode: " << (VIEWER_MODE == MODE::USE_CAD) << ", cad_cloud: " << *cad_cloud << std::endl;
+				if (cad_cloud && (donen = !viewer.updatePointCloud(cad_cloud, "cloud2"))) {
+					viewer.addPointCloud(cad_cloud, "cloud2");
+					viewer.setPointCloudRenderingProperties(pcl::visualization::PCL_VISUALIZER_COLOR, 1.0, 0.0, 0.0, "cloud2");
+					viewer.setPointCloudRenderingProperties(pcl::visualization::PCL_VISUALIZER_POINT_SIZE, 2, "cloud2");
+				}
+
+			}
+
+			else {
+				if (new_cloud && !viewer.updatePointCloud(new_cloud, "cloud")) {
+					viewer.addPointCloud(new_cloud, "cloud");
 					viewer.setPointCloudRenderingProperties(pcl::visualization::PCL_VISUALIZER_POINT_SIZE, 2, "cloud");
 				}
 			}
-			else {
-
-				if (VIEWER_MODE == MODE::USE_CAD) {
-					if (!viewer.updatePointCloud(cad_cloud, "cloud")) {
-						viewer.addPointCloud(cad_cloud, "cloud");
-						viewer.setPointCloudRenderingProperties(pcl::visualization::PCL_VISUALIZER_POINT_SIZE, 2, "cloud");
-					}
-				}
-				else {
-					if (!viewer.updatePointCloud(new_cloud, "cloud")) {
-						viewer.addPointCloud(new_cloud, "cloud");
-						viewer.setPointCloudRenderingProperties(pcl::visualization::PCL_VISUALIZER_POINT_SIZE, 2, "cloud");
-					}
-				}
-			}
-
-			if (keys_found && !viewer.updatePointCloud(key_cloud, "keypoints")) {
-				viewer.addPointCloud(key_cloud, "keypoints");
-				viewer.setPointCloudRenderingProperties(pcl::visualization::PCL_VISUALIZER_POINT_SIZE, 10, "keypoints");
-				viewer.setPointCloudRenderingProperties(pcl::visualization::PCL_VISUALIZER_COLOR, 1.0, 0.0, 0.0, "keypoints");
-
-			}
-
-			last_cloud = new_cloud;
-			
-			if(VIEWER_MODE == MODE::USE_GRABBER)
-				new_cloud.reset();
 		}
+
+		if (key_cloud && keys_found && !viewer.updatePointCloud(key_cloud, "keypoints")) {
+			viewer.addPointCloud(key_cloud, "keypoints");
+			viewer.setPointCloudRenderingProperties(pcl::visualization::PCL_VISUALIZER_POINT_SIZE, 10, "keypoints");
+			viewer.setPointCloudRenderingProperties(pcl::visualization::PCL_VISUALIZER_COLOR, 1.0, 0.0, 0.0, "keypoints");
+
+		}
+
+		last_cloud = new_cloud;
+			
+		if(VIEWER_MODE == MODE::USE_GRABBER)
+			new_cloud.reset();
+
 		viewer.spinOnce(1, true);
 	}
 
@@ -120,10 +124,10 @@ Mesh<Point3DC>::keyboardCallback(const pcl::visualization::KeyboardEvent &event,
 		else if (event.getKeyCode() == 'v' || event.getKeyCode() == 'V') {
 			VIEWER_MODE = MODE::USE_CAD;
 			Mesh<Point3DC>::visualizeCADFile();
-			std::cout << "key point: " << (*new_cloud) << std::endl;
+			std::cout << "key point: " << (*cad_cloud) << std::endl;
 
 			boost::shared_ptr<typename PointCloudT> t_cloud(boost::const_pointer_cast<typename PointCloudT>(last_cloud));
-			subtractPointClouds(t_cloud, cad_cloud);
+			//subtractPointClouds(t_cloud, cad_cloud);
 		}
 		else if (event.getKeyCode() == 'C' || event.getKeyCode() == 'C') {
 			std::cout << (*new_cloud) << std::endl;
@@ -246,13 +250,15 @@ Mesh<Point3DC>::visualizeCADFile() {
 		grabber.stop();
 	}
 
-	/*for (int i = 0; i < cad_cloud->height; i++) {
+	for (int i = 0; i < cad_cloud->height; i++) {
 		for (int j = 0; j < cad_cloud->width; j++) {
-			std::cout << cad_cloud->at(j, i).x << cad_cloud->at(j, i).y << cad_cloud->at(j, i).z << "\n";
+			cad_cloud->at(j, i).rgb = 0;
+			cad_cloud->at(j, i).rgba = 0;
+			//std::cout << "p: " << cad_cloud->at(j, i).rgb << ", " << cad_cloud->at(j, i).rgba << "\n";
 		}
 	}
-	*/
-	std::cout << "visualizing complete: " << (*new_cloud) << std::endl;
+	
+	std::cout << "visualizing complete: " << (*cad_cloud) << std::endl;
 }
 
 template<> void
@@ -277,7 +283,7 @@ Mesh<Point3DC>::subtractPointClouds(typename PointCloudT::Ptr cloud_a, typename 
 	
 	pcl::PointCloud<Point3DC>::Ptr out_cloud =  boost::make_shared < pcl::PointCloud<Point3DC>>();
 	subtractor->segment(*out_cloud);
-	std::cout << "Differences calculated: " << *out_cloud << std::endl;
+	//std::cout << "Differences calculated: " << *out_cloud << std::endl;
 
 }
 

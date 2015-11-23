@@ -88,4 +88,4 @@ private:
 
 	pcl::StatisticalOutlierRemoval<PointT> sor;
 	
-};
+};	
