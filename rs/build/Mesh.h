@@ -61,7 +61,7 @@ private:
 	int window;
 	int threshold;
 	
-	std::string cad_filename = "pcl.pcd";
+	std::string cad_filename = "box2.pcd";
 
 	mutable boost::mutex new_cloud_mutex;
 	typename PointCloudT::ConstPtr new_cloud;
@@ -81,7 +81,7 @@ private:
 	void loadTransformFromFile(int dim = 3);
 	void visualizeCADFile();
 	void transformPointCloud(typename PointCloudT::Ptr cloud, Eigen::Matrix4f *transform);
-	void subtractPointClouds(typename PointCloudT::Ptr cloud_a, typename PointCloudT::Ptr cloud_b);
+	pcl::PointCloud<Point3DC> subtractPointClouds(typename PointCloudT::Ptr cloud_a, typename PointCloudT::Ptr cloud_b);
 
 	bool filtering_on = false;
 	MODE VIEWER_MODE = MODE::USE_GRABBER;

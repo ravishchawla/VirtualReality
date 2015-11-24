@@ -57,12 +57,12 @@ Mesh<Point3DC>::run() {
 			if (VIEWER_MODE == MODE::USE_CAD) {
 				bool donen = false;
 				//std::cout << "mode: " << (VIEWER_MODE == MODE::USE_CAD) << ", cad_cloud: " << *cad_cloud << std::endl;
-				if (cad_cloud && (donen = !viewer.updatePointCloud(cad_cloud, "cloud2"))) {
-					viewer.addPointCloud(cad_cloud, "cloud2");
-					viewer.setPointCloudRenderingProperties(pcl::visualization::PCL_VISUALIZER_COLOR, 1.0, 0.0, 0.0, "cloud2");
-					viewer.setPointCloudRenderingProperties(pcl::visualization::PCL_VISUALIZER_POINT_SIZE, 2, "cloud2");
+				if (cad_cloud && (donen = !viewer.updatePointCloud(cad_cloud, "cad"))) {
+					viewer.removePointCloud("cloud");
+					viewer.addPointCloud(cad_cloud, "cad");
+					viewer.setPointCloudRenderingProperties(pcl::visualization::PCL_VISUALIZER_COLOR, 1.0, 0.0, 0.0, "cad");
+					viewer.setPointCloudRenderingProperties(pcl::visualization::PCL_VISUALIZER_POINT_SIZE, 2, "cad");
 				}
-
 			}
 
 			else {
@@ -127,7 +127,9 @@ Mesh<Point3DC>::keyboardCallback(const pcl::visualization::KeyboardEvent &event,
 			std::cout << "key point: " << (*cad_cloud) << std::endl;
 
 			boost::shared_ptr<typename PointCloudT> t_cloud(boost::const_pointer_cast<typename PointCloudT>(last_cloud));
-			//subtractPointClouds(t_cloud, cad_cloud);
+			pcl::PointCloud<Point3DC> w_cloud;
+			w_cloud = subtractPointClouds(t_cloud, cad_cloud);
+			cad_cloud = boost::make_shared < pcl::PointCloud<Point3DC>>(w_cloud);
 		}
 		else if (event.getKeyCode() == 'C' || event.getKeyCode() == 'C') {
 			std::cout << (*new_cloud) << std::endl;
@@ -249,13 +251,20 @@ Mesh<Point3DC>::visualizeCADFile() {
 	if (grabber.isRunning() == true) {
 		grabber.stop();
 	}
-
-	for (int i = 0; i < cad_cloud->height; i++) {
-		for (int j = 0; j < cad_cloud->width; j++) {
-			cad_cloud->at(j, i).rgb = 0;
-			cad_cloud->at(j, i).rgba = 0;
-			//std::cout << "p: " << cad_cloud->at(j, i).rgb << ", " << cad_cloud->at(j, i).rgba << "\n";
+	try {
+		pcl::PointCloud<Point3DC>::iterator ite;
+		int scale = 0.9;
+		for (ite = cad_cloud->begin(); ite != cad_cloud->end(); ite++) {
+			(ite)->rgb = 0;
+			(ite)->rgba = 0;
+			//(ite)->x *= scale;
+			//(ite)->y *= scale;
+			//(ite)->z *= scale;
 		}
+
+	}
+	catch (std::exception e) {
+		std::cout << "exc caught: " << e.what() << std::endl;
 	}
 	
 	std::cout << "visualizing complete: " << (*cad_cloud) << std::endl;
@@ -265,28 +274,35 @@ template<> void
 Mesh<Point3DC>::transformPointCloud(typename PointCloudT::Ptr cloud, Eigen::Matrix4f *transform) {
 	PointCloudT::Ptr transform_cloud;
 	transform_cloud = boost::make_shared<pcl::PointCloud<Point3DC>>();
-	pcl::transformPointCloud(*cloud, *transform_cloud, *transform);
+	//pcl::transformPointCloud(*cloud, *transform_cloud, *transform);
 	
+	int scale = 0.5;
+	Eigen::Affine3f *scaling = &Eigen::Affine3f();
+	(*scaling)(0, 0) = scale;
+	(*scaling)(1, 1) = scale;
+	(*scaling)(2, 2) = scale;
 
+	for (int j = 0; j < 3; j++)
+		for (int i = 0; i < 3; i++)
+			if (i != j)
+				(*scaling)(i, j) = 0;
+
+	
+	pcl::transformPointCloud(*cloud, *transform_cloud, *scaling);
 	*cloud = *transform_cloud;
 }
 
-template<> void
+template<> pcl::PointCloud<Point3DC>
 Mesh<Point3DC>::subtractPointClouds(typename PointCloudT::Ptr cloud_a, typename PointCloudT::Ptr cloud_b) {
 	pcl::SegmentDifferences<Point3DC> *subtractor = &pcl::SegmentDifferences<Point3DC>();
 	subtractor->setInputCloud(cloud_a);
 	subtractor->setTargetCloud(cloud_b);
-
-	pcl::search::KdTree<Point3DC>::Ptr tree(new pcl::search::KdTree<Point3DC>());
-	subtractor->setSearchMethod(tree);
-
 	
 	pcl::PointCloud<Point3DC>::Ptr out_cloud =  boost::make_shared < pcl::PointCloud<Point3DC>>();
 	subtractor->segment(*out_cloud);
 	//std::cout << "Differences calculated: " << *out_cloud << std::endl;
-
+	return *out_cloud;
 }
-
 
 int main(int argx, char** argv)
 {
@@ -306,5 +322,6 @@ int main(int argx, char** argv)
 		OutputDebugStringA(e.what());
 		return(1);
 	}
+	std::system("pause");
 	return(0);
 }

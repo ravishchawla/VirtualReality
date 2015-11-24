@@ -1,4 +1,4 @@
-﻿Build started 11/10/2015 10:31:34 AM.
+﻿Build started 11/23/2015 3:37:20 PM.
      1>Project "C:\Users\Ravish\Documents\Visual Studio 2015\Projects\VirtualReality\CameraTest\CameraTest.vcxproj" on node 2 (Build target(s)).
      1>Link:
          CameraTest.vcxproj -> C:\Users\Ravish\Documents\Visual Studio 2015\Projects\VirtualReality\x64\Debug\CameraTest.exe
@@ -6,4 +6,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:00.32
+Time Elapsed 00:00:00.18
