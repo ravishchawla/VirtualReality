@@ -5,6 +5,7 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Mesh.cpp" />
+    <ClCompile Include="Viewpoint.cpp" />
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="C:\Users\Ravish\Documents\Visual Studio 2015\Projects\rs\CMakeLists.txt" />
@@ -16,5 +17,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Mesh.h" />
+    <ClInclude Include="Viewpoint.h" />
   </ItemGroup>
 </Project>

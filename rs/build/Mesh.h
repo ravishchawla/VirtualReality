@@ -61,7 +61,7 @@ private:
 	int window;
 	int threshold;
 	
-	std::string cad_filename = "box2.pcd";
+	std::string cad_filename = "three.pcd";
 
 	mutable boost::mutex new_cloud_mutex;
 	typename PointCloudT::ConstPtr new_cloud;

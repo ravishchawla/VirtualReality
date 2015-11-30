@@ -107,10 +107,15 @@ template<> void
 Mesh<Point3DC>::keyboardCallback(const pcl::visualization::KeyboardEvent &event, void*) {
 	if (event.keyDown()) {
 		if (event.getKeyCode() == 's' || event.getKeyCode() == 'S') {
-			boost::format fmt("RS_%s_%u.pcd");
-			std::string fn = boost::str(fmt % grabber.getDeviceSerialNumber().c_str() % last_cloud->header.stamp);
-			pcl::io::savePCDFileBinaryCompressed(fn, *last_cloud);
-			std::cout << "Saved point cloud " << fn.c_str() << std::endl;
+			try {
+				boost::format fmt("RS_%s_%u.pcd");
+				std::string fn = boost::str(fmt % grabber.getDeviceSerialNumber().c_str() % last_cloud->header.stamp);
+				pcl::io::savePCDFileBinaryCompressed(fn, *last_cloud);
+				std::cout << "Saved point cloud " << fn.c_str() << std::endl;
+			}
+			catch (std::exception e) {
+				std::cout << "exception when saving pcl: " << e.what() << std::endl;
+			}
 		}
 
 		else if (event.getKeyCode() == 'k' || event.getKeyCode() == 'K') {
@@ -126,10 +131,10 @@ Mesh<Point3DC>::keyboardCallback(const pcl::visualization::KeyboardEvent &event,
 			Mesh<Point3DC>::visualizeCADFile();
 			std::cout << "key point: " << (*cad_cloud) << std::endl;
 
-			boost::shared_ptr<typename PointCloudT> t_cloud(boost::const_pointer_cast<typename PointCloudT>(last_cloud));
-			pcl::PointCloud<Point3DC> w_cloud;
-			w_cloud = subtractPointClouds(t_cloud, cad_cloud);
-			cad_cloud = boost::make_shared < pcl::PointCloud<Point3DC>>(w_cloud);
+			//boost::shared_ptr<typename PointCloudT> t_cloud(boost::const_pointer_cast<typename PointCloudT>(last_cloud));
+			//pcl::PointCloud<Point3DC> w_cloud;
+			//w_cloud = subtractPointClouds(t_cloud, cad_cloud);
+			//cad_cloud = boost::make_shared < pcl::PointCloud<Point3DC>>(w_cloud);
 		}
 		else if (event.getKeyCode() == 'C' || event.getKeyCode() == 'C') {
 			std::cout << (*new_cloud) << std::endl;
@@ -304,8 +309,8 @@ Mesh<Point3DC>::subtractPointClouds(typename PointCloudT::Ptr cloud_a, typename 
 	return *out_cloud;
 }
 
-int main(int argx, char** argv)
-{
+int
+main234(int argx, char** argv) {
 	std::string device_id = "";
 	try
 	{

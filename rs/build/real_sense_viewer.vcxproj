@@ -321,6 +321,7 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
   <ItemGroup>
     <ClCompile Include="C:\Users\Ravish\Documents\Visual Studio 2015\Projects\rs\src\real_sense_viewer.cpp" />
     <ClCompile Include="Mesh.cpp" />
+    <ClCompile Include="Viewpoint.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="C:/Users/Ravish/Documents/Visual Studio 2015/Projects/VirtualReality/rs/build/ZERO_CHECK.vcxproj">
@@ -332,6 +333,7 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Mesh.h" />
+    <ClInclude Include="Viewpoint.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
