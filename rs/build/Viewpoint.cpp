@@ -15,8 +15,8 @@ Viewpoint<Point3DC>::Viewpoint() : viewer("Point Cloud Viewer") {
 	std::cout << "View 2 cloud: " << *view2Cloud << std::endl;
 	loadPointCloud(view3Cloud, view3Name);
 	std::cout << "View 3 cloud: " << *view3Cloud << std::endl;
-	//loadPointCloud(cadCloud, cadName);
-	//std::cout << "CAD cloud: " << *cadCloud << std::endl;
+	loadPointCloud(cadCloud, cadName);
+	std::cout << "CAD cloud: " << *cadCloud << std::endl;
 	viewMode = View::VIEW_3;
 
 	viewer.setCameraFieldOfView(0.785398); //approximately 45 degrees
@@ -31,9 +31,6 @@ Viewpoint<PointT>::~Viewpoint()
 
 template<> void
 Viewpoint<Point3DC>::run() {
-
-	pcl::PointCloud<Point3DC>::Ptr currentCloud;
-
 
 	while (!viewer.wasStopped()) {
 		if (viewMode != lastViewMode && viewMode != View::NIL) {
@@ -88,10 +85,72 @@ Viewpoint<Point3DC>::loadPointCloud(typename PointCloudT::Ptr cloud, std::string
 }
 
 template<> pcl::PointCloud<Point3DC>
-Viewpoint<Point3DC>::subtractPointClouds(typename PointCloudT::Ptr cloud1,
-	typename PointCloudT::Ptr cloud2) {
-
+Viewpoint<Point3DC>::subtractPointClouds(typename PointCloudT::Ptr cloud1, typename PointCloudT::Ptr cloud2) {
+	
 	return *cloud2;
+}
+
+template<> std::vector<int>
+Viewpoint<Point3DC>::fitPlaneToCloudOnNormal(typename PointCloudT::Ptr cloud, Eigen::Vector3f normal) {
+
+	pcl::SampleConsensusModelPerpendicularPlane<Point3DC>::Ptr model(new pcl::SampleConsensusModelPerpendicularPlane<Point3DC>(cloud));
+	model->setAxis(normal);
+	model->setEpsAngle(pcl::deg2rad(15.0));
+	pcl::MaximumLikelihoodSampleConsensus<Point3DC> seg(model, 0.01);
+	bool result = seg.computeModel();
+
+	std::vector<int> sample;
+	seg.getModel(sample);
+
+	std::vector<int> inliers;
+	seg.getInliers(inliers);
+	
+	if (inliers.size() == 0) {
+		std::cout << "Unable to estimate plane for cloud" << std::endl;
+	}
+	else {
+		std::cout << "Model Coefficients: ";
+		for (int i = 0; i < sample.size(); i++) {
+			std::cout << sample[i] << " ";
+		}
+
+		std::cout << std::endl;
+		std::cout << "Inliers: " << inliers.size() << std::endl;
+	}
+
+	return sample;
+}
+
+
+
+template<> pcl::ModelCoefficients::Ptr
+Viewpoint<Point3DC>::fitPlaneToCloud(typename PointCloudT::Ptr cloud) {
+	pcl::ModelCoefficients::Ptr coeffs(new pcl::ModelCoefficients());
+	pcl::PointIndices::Ptr inliers(new pcl::PointIndices());
+
+	pcl::SACSegmentation<Point3DC> seg;
+	seg.setOptimizeCoefficients(true);
+
+	seg.setModelType(pcl::SACMODEL_PLANE);
+	seg.setMethodType(pcl::SAC_RANSAC);
+	seg.setDistanceThreshold(0.01);
+
+	seg.setInputCloud(cloud);
+	seg.segment(*inliers, *coeffs);
+
+	if (inliers->indices.size() == 0) {
+		std::cout << "Unable to estimate plane for cloud" << std::endl;
+	}
+	else {
+		std::cout << "Model Coefficients: " << coeffs->values[0] << " "
+			<< coeffs->values[1] << " "
+			<< coeffs->values[2] << " "
+			<< coeffs->values[3] << std::endl;
+
+		std::cout << "Inliers: " << inliers->indices.size() << std::endl;
+	}
+
+	return coeffs;
 }
 
 template<> void
@@ -122,6 +181,18 @@ Viewpoint<Point3DC>::keyboardCallback(const pcl::visualization::KeyboardEvent &e
 				break;
 			default:
 				std::cout << "code: " << event.getKeyCode() << std::endl;
+			}
+		}
+
+		if (event.getKeyCode() == 's') {
+
+			if (viewMode == View::VIEW_0) {
+				planarEquation = fitPlaneToCloud(currentCloud);
+				//Model Coefficients: 0.551668 -0.636846 -0.538599 0.552964
+			}
+			else if (viewMode == View::VIEW_1) {
+				std::vector<float> vals = planarEquation->values;
+				fitPlaneToCloudOnNormal(currentCloud, Eigen::Vector3f(vals[0], vals[1], vals[2]));
 			}
 		}
 	}

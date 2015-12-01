@@ -8,10 +8,14 @@
 #include <boost/make_shared.hpp>
 #include <boost/thread/mutex.hpp>
 
+#include <pcl\common\impl\angles.hpp>
 #include <pcl/io/pcd_io.h>
 #include <pcl/io/ply_io.h>
 #include <pcl/io/io_exception.h>
 #include <pcl/visualization/pcl_visualizer.h>
+#include <pcl/segmentation/sac_segmentation.h>
+#include <pcl/sample_consensus/sac_model_normal_plane.h>
+#include <pcl/sample_consensus/mlesac.h>
 
 #include <pcl/segmentation/segment_differences.h>
 #include "real_sense_grabber.h"
@@ -48,19 +52,25 @@ private:
 	std::string view1Name = "view01.ply";
 	std::string view2Name = "view02.ply";
 	std::string view3Name = "view03.ply";
-	std::string cadName = "box2.pcd";
+	std::string cadName = "box2.ply";
 
 	typename PointCloudT::Ptr view0Cloud;
 	typename PointCloudT::Ptr view1Cloud;
 	typename PointCloudT::Ptr view2Cloud;
 	typename PointCloudT::Ptr view3Cloud;
 	typename PointCloudT::Ptr cadCloud;
+	typename PointCloudT::Ptr currentCloud;
 
 	void keyboardCallback(const pcl::visualization::KeyboardEvent & event, void*);
 	void loadPointCloud(typename PointCloudT::Ptr cloud, std::string filename);
 	pcl::PointCloud<Point3DC> subtractPointClouds(typename PointCloudT::Ptr cloud1,
 												  typename PointCloudT::Ptr cloud2);
+	std::vector<int> fitPlaneToCloudOnNormal(typename PointCloudT::Ptr cloud,
+														Eigen::Vector3f normal);
+
+	pcl::ModelCoefficients::Ptr fitPlaneToCloud(typename PointCloudT::Ptr cloud);
 	View viewMode = View::NIL;
 	View lastViewMode = View::NIL;
 
+	pcl::ModelCoefficients::Ptr planarEquation;
 };
