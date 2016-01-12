@@ -56,39 +56,39 @@ Because this project relises on different Computer Vision libraries, they have t
 The project is built on an x64 Configuration on Windows only. 
 
 Installation steps:
-1. Visual Studios
-  -The project is built on Visual Studios 2015, which can be obtained from Microsoft. A version that supports C++ compiling is needed.
-2. Cmake
-  - CMake (GUI recommended) is needed to compile different libraries.
-  - For CMAKE, the following properties were used:
-    - Visual Studio 14 2015 Win64
-    - Use Default native compilers
-    - Run cmake using Admin properties
-3. Real Sense SDK 
-  - The Real Sense SDK can be obtained at: https://software.intel.com/en-us/intel-realsense-sdk
-4. OpenGL/FreeGLUT
-  - The library can be obtained here: http://freeglut.sourceforge.net/index.php#download
-  - use the latest stable release
-5. OpenCV
-  - OpenCV has to be compiled and built from source, because the latest release is not availaible as binaries
-  - The source can be obtained at: https://github.com/Itseez/opencv and compiled with CMAKE
-  - Open the compiled project file with Visual Studio and build the libraries.
-6. OpenCV-contrib
-  - OpenCV-contrib packages are also needed, however, they are already included in the project as source files, so they do not need to be downloaded.
-7. PCL 1.7.2
-  - PCL also has to be compiled from source, because the version 1.7.2 is not availaible as binaries
-  - The source can be downloaded from: https://github.com/PointCloudLibrary/pcl 
-  - PCL also has many dependencies, some of which can be installed directly using installers:
-    - BOOST - installable from http://www.boost.org/
-    - Eigen - need to be compiled from source because latest version is needed
-    - FLANN - need to be compiled from source because latest version is needed
-    - VTK - installable from http://www.vtk.org/
-    - QHull - installable from http://www.qhull.org/
-    - OpenNI and OpenNI2 - both versions are needed by PCL - need to be comipled from source
-8. (Project taketwo/rs)
-  - This project is used for its Point Cloud grabber, but it has already been compiled and the project files are included.
-  - If a more updated version of the repository than the one used (last downloaded Nov. 2015) is needed, it will have to be re-compiled, and rebuilt with Visual Studios. 
-  - The project requires all above libraries, and CMAKE will check for the corresponding paths.
+- Visual Studios
+  1. The project is built on Visual Studios 2015, which can be obtained from Microsoft. A version that supports C++ compiling is needed.
+- Cmake
+  1. CMake (GUI recommended) is needed to compile different libraries.
+  2. For CMAKE, the following properties were used:
+    * Visual Studio 14 2015 Win64
+    * Use Default native compilers
+    * Run cmake using Admin properties
+- Real Sense SDK 
+  1. The Real Sense SDK can be obtained at: https://software.intel.com/en-us/intel-realsense-sdk
+- OpenGL/FreeGLUT
+  2. The library can be obtained here: http://freeglut.sourceforge.net/index.php#download
+  3. use the latest stable release
+- OpenCV
+  1. OpenCV has to be compiled and built from source, because the latest release is not availaible as binaries
+  2. The source can be obtained at: https://github.com/Itseez/opencv and compiled with CMAKE
+  3. Open the compiled project file with Visual Studio and build the libraries.
+- OpenCV-contrib
+  1. OpenCV-contrib packages are also needed, however, they are already included in the project as source files, so they do not need to be downloaded.
+- PCL 1.7.2
+  1. PCL also has to be compiled from source, because the version 1.7.2 is not availaible as binaries
+  2. The source can be downloaded from: https://github.com/PointCloudLibrary/pcl 
+  3. PCL also has many dependencies, some of which can be installed directly using installers:
+    * BOOST - installable from http://www.boost.org/
+    * Eigen - need to be compiled from source because latest version is needed
+    * FLANN - need to be compiled from source because latest version is needed
+    * VTK - installable from http://www.vtk.org/
+    * QHull - installable from http://www.qhull.org/
+    * OpenNI and OpenNI2 - both versions are needed by PCL - need to be comipled from source
+- (Project taketwo/rs)
+  1. This project is used for its Point Cloud grabber, but it has already been compiled and the project files are included.
+  2. If a more updated version of the repository than the one used (last downloaded Nov. 2015) is needed, it will have to be re-compiled, and rebuilt with Visual Studios. 
+  3. The project requires all above libraries, and CMAKE will check for the corresponding paths.
   
 Build instructions:
 
